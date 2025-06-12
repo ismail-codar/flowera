@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    "YuTengjing.open-in-external-app",
+    "eamodio.gitlens",
+    "formulahendry.code-runner",
+    "formulahendry.auto-complete-tag",
+    "emeraldwalk.runonsave",
+    "AlDuncanson.react-hooks-snippets",
+    "sburg.vscode-javascript-booster",
+    "aaron-bond.better-comments",
+    "alefragnani.Bookmarks",
+    "wix.vscode-import-cost",
+    "ionutvmi.path-autocomplete",
+    "naumovs.color-highlight",
+    "IBM.output-colorizer",
+    "yoavbls.pretty-ts-errors",
+    "Codeium.codeium",
+    "alefragnani.Bookmarks",
+    "likec4.likec4-vscode",
+    "biomejs.biome"
+  ]
+}

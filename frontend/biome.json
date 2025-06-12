@@ -1,0 +1,121 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120,
+    "lineEnding": "crlf"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        "useKeyWithMouseEvents": "warn",
+        "useIframeTitle": "warn",
+        "useKeyWithClickEvents": "off",
+        "useButtonType": "warn",
+        "noLabelWithoutControl": "warn",
+        "noHeaderScope": "warn",
+        "useAltText": "warn",
+        "noAutofocus": "warn",
+        "noRedundantAlt": "warn",
+        "useValidAnchor": "warn",
+        "useSemanticElements": "warn",
+        "noNoninteractiveTabindex": "warn",
+        "noSvgWithoutTitle": "warn",
+        "noBlankTarget": "warn",
+        "useFocusableInteractive": "warn",
+        "useAriaPropsForRole": "warn"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off",
+        "noEmptyPattern": "warn",
+        "noInnerDeclarations": "warn",
+        "noSwitchDeclarations": "warn",
+        "useJsxKeyInIterable": "warn",
+        "noUnsafeOptionalChaining": "warn",
+        "noUnreachable": "warn",
+        "noSelfAssign": "warn"
+      },
+      "nursery": {},
+      "complexity": {
+        "noForEach": "warn",
+        "useOptionalChain": "warn",
+        "noUselessFragments": "warn",
+        "noUselessTernary": "warn",
+        "noUselessTypeConstraint": "warn",
+        "noBannedTypes": "warn",
+        "useLiteralKeys": "warn",
+        "noUselessSwitchCase": "warn",
+        "useArrowFunction": "warn"
+      },
+      "performance": {
+        "noDelete": "warn",
+        "noAccumulatingSpread": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn",
+        "noGlobalEval": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn",
+        "noThenProperty": "warn",
+        "noDoubleEquals": "warn",
+        "noArrayIndexKey": "error",
+        "noSuspiciousSemicolonInJsx": "warn",
+        "noConfusingVoidType": "warn",
+        "noDebugger": "warn",
+        "noImplicitAnyLet": "warn",
+        "noAssignInExpressions": "warn",
+        "useDefaultSwitchClauseLast": "warn",
+        "noEmptyInterface": "off",
+        "noAsyncPromiseExecutor": "warn",
+        "noGlobalAssign": "warn",
+        "noGlobalIsNan": "warn",
+        "noShadowRestrictedNames": "warn",
+        "noFallthroughSwitchClause": "warn",
+        "noPrototypeBuiltins": "warn"
+      },
+      "style": {
+        "useImportType": "warn",
+        "useTemplate": "warn",
+        "noUnusedTemplateLiteral": "warn",
+        "useSelfClosingElements": "warn",
+        "useConst": "warn",
+        "noVar": "warn",
+        "noNonNullAssertion": "warn",
+        "noUselessElse": "warn",
+        "noParameterAssign": "warn",
+        "useSingleVarDeclarator": "warn",
+        "noInferrableTypes": "warn",
+        "useExponentiationOperator": "warn",
+        "useNumberNamespace": "warn",
+        "noCommaOperator": "warn",
+        "useDefaultParameterLast": "warn",
+        "useAsConstAssertion": "warn"
+      }
+    }
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "files": {
+    "include": [
+      "**/*.mjs",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.css",
+      "**/*.scss"
+    ],
+    "ignore": [
+      "node_modules",
+      ".next",
+      "tmp",
+      "**/*.js",
+      "**/*.min.css",
+      "src/services/tys-api.ts"
+    ]
+  }
+}
