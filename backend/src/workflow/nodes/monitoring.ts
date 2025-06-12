@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Error Handling & Monitoring Nodes
-export interface IWorkflowErrorHandlerNode extends IWorkflowActionNode<"errorHandler"> {
+export interface IWorkflowErrorHandlerNode <N extends string> extends IWorkflowActionNode<N, "errorHandler"> {
     actionType: "errorHandler";
     properties: {
         errorTypes: ("timeout" | "validation" | "network" | "authentication" | "authorization" | "server" | "custom")[];
@@ -19,7 +19,7 @@ export interface IWorkflowErrorHandlerNode extends IWorkflowActionNode<"errorHan
     };
 }
 
-export interface IWorkflowRetryNode extends IWorkflowActionNode<"retry"> {
+export interface IWorkflowRetryNode <N extends string> extends IWorkflowActionNode<N, "retry"> {
     actionType: "retry";
     properties: {
         maxAttempts: number;
@@ -36,7 +36,7 @@ export interface IWorkflowRetryNode extends IWorkflowActionNode<"retry"> {
     };
 }
 
-export interface IWorkflowLoggerNode extends IWorkflowActionNode<"logger"> {
+export interface IWorkflowLoggerNode <N extends string> extends IWorkflowActionNode<N, "logger"> {
     actionType: "logger";
     properties: {
         level: "trace" | "debug" | "info" | "warn" | "error" | "fatal";
@@ -51,7 +51,7 @@ export interface IWorkflowLoggerNode extends IWorkflowActionNode<"logger"> {
     };
 }
 
-export interface IWorkflowMetricsNode extends IWorkflowActionNode<"metrics"> {
+export interface IWorkflowMetricsNode <N extends string> extends IWorkflowActionNode<N, "metrics"> {
     actionType: "metrics";
     properties: {
         metricType: "counter" | "gauge" | "histogram" | "timer";
@@ -65,7 +65,7 @@ export interface IWorkflowMetricsNode extends IWorkflowActionNode<"metrics"> {
     };
 }
 
-export interface IWorkflowHealthCheckNode extends IWorkflowActionNode<"healthCheck"> {
+export interface IWorkflowHealthCheckNode <N extends string> extends IWorkflowActionNode<N, "healthCheck"> {
     actionType: "healthCheck";
     properties: {
         checks: {
@@ -83,10 +83,10 @@ export interface IWorkflowHealthCheckNode extends IWorkflowActionNode<"healthChe
     };
 }
 
-export type IWorkflowErrorHandlingNodes = 
-    | IWorkflowErrorHandlerNode 
-    | IWorkflowRetryNode 
-    | IWorkflowLoggerNode
-    | IWorkflowMetricsNode
-    | IWorkflowHealthCheckNode;
+export type IWorkflowErrorHandlingNodes<N extends string> = 
+    | IWorkflowErrorHandlerNode <N>
+    | IWorkflowRetryNode <N>
+    | IWorkflowLoggerNode<N>
+    | IWorkflowMetricsNode<N>
+    | IWorkflowHealthCheckNode<N>;
 // #endregion

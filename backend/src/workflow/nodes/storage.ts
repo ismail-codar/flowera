@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Data Storage & Database Nodes
-export interface IWorkflowDatabaseNode extends IWorkflowActionNode<"database"> {
+export interface IWorkflowDatabaseNode <N extends string> extends IWorkflowActionNode<N, "database"> {
     actionType: "database";
     properties: {
         operation: "select" | "insert" | "update" | "delete" | "transaction";
@@ -22,7 +22,7 @@ export interface IWorkflowDatabaseNode extends IWorkflowActionNode<"database"> {
     };
 }
 
-export interface IWorkflowRedisNode extends IWorkflowActionNode<"redis"> {
+export interface IWorkflowRedisNode <N extends string> extends IWorkflowActionNode<N, "redis"> {
     actionType: "redis";
     properties: {
         operation: "get" | "set" | "del" | "exists" | "expire" | "lpush" | "rpush" | "lpop" | "rpop" | "hget" | "hset";
@@ -37,7 +37,7 @@ export interface IWorkflowRedisNode extends IWorkflowActionNode<"redis"> {
     };
 }
 
-export interface IWorkflowElasticsearchNode extends IWorkflowActionNode<"elasticsearch"> {
+export interface IWorkflowElasticsearchNode <N extends string> extends IWorkflowActionNode<N, "elasticsearch"> {
     actionType: "elasticsearch";
     properties: {
         operation: "index" | "get" | "search" | "update" | "delete" | "bulk";
@@ -56,8 +56,8 @@ export interface IWorkflowElasticsearchNode extends IWorkflowActionNode<"elastic
     };
 }
 
-export type IWorkflowDataStorageNodes = 
-    | IWorkflowDatabaseNode 
-    | IWorkflowRedisNode 
-    | IWorkflowElasticsearchNode;
+export type IWorkflowDataStorageNodes<N extends string> = 
+    | IWorkflowDatabaseNode <N>
+    | IWorkflowRedisNode <N>
+    | IWorkflowElasticsearchNode<N>;
 // #endregion

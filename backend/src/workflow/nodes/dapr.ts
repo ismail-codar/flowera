@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Dapr Integration Nodes
-export interface IWorkflowDaprStateStoreNode extends IWorkflowActionNode<"stateStore"> {
+export interface IWorkflowDaprStateStoreNode <N extends string> extends IWorkflowActionNode<N, "stateStore"> {
     actionType: "stateStore";
     properties: {
         operation: "get" | "set" | "delete" | "bulk" | "transaction";
@@ -24,7 +24,7 @@ export interface IWorkflowDaprStateStoreNode extends IWorkflowActionNode<"stateS
     };
 }
 
-export interface IWorkflowDaprPubSubNode extends IWorkflowActionNode<"pubSub"> {
+export interface IWorkflowDaprPubSubNode <N extends string> extends IWorkflowActionNode<N, "pubSub"> {
     actionType: "pubSub";
     properties: {
         operation: "publish" | "subscribe";
@@ -43,7 +43,7 @@ export interface IWorkflowDaprPubSubNode extends IWorkflowActionNode<"pubSub"> {
     };
 }
 
-export interface IWorkflowDaprServiceInvocationNode extends IWorkflowActionNode<"serviceInvocation"> {
+export interface IWorkflowDaprServiceInvocationNode <N extends string> extends IWorkflowActionNode<N, "serviceInvocation"> {
     actionType: "serviceInvocation";
     properties: {
         appId: string;
@@ -63,7 +63,7 @@ export interface IWorkflowDaprServiceInvocationNode extends IWorkflowActionNode<
     };
 }
 
-export interface IWorkflowDaprBindingNode extends IWorkflowActionNode<"binding"> {
+export interface IWorkflowDaprBindingNode <N extends string> extends IWorkflowActionNode<N, "binding"> {
     actionType: "binding";
     properties: {
         bindingName: string;
@@ -74,7 +74,7 @@ export interface IWorkflowDaprBindingNode extends IWorkflowActionNode<"binding">
     };
 }
 
-export interface IWorkflowDaprSecretsNode extends IWorkflowActionNode<"secrets"> {
+export interface IWorkflowDaprSecretsNode <N extends string> extends IWorkflowActionNode<N, "secrets"> {
     actionType: "secrets";
     properties: {
         storeName: string;
@@ -84,7 +84,7 @@ export interface IWorkflowDaprSecretsNode extends IWorkflowActionNode<"secrets">
     };
 }
 
-export interface IWorkflowDaprConfigurationNode extends IWorkflowActionNode<"configuration"> {
+export interface IWorkflowDaprConfigurationNode <N extends string> extends IWorkflowActionNode<N, "configuration"> {
     actionType: "configuration";
     properties: {
         storeName: string;
@@ -95,7 +95,7 @@ export interface IWorkflowDaprConfigurationNode extends IWorkflowActionNode<"con
     };
 }
 
-export interface IWorkflowDaprLockNode extends IWorkflowActionNode<"lock"> {
+export interface IWorkflowDaprLockNode <N extends string> extends IWorkflowActionNode<N, "lock"> {
     actionType: "lock";
     properties: {
         operation: "tryLock" | "unlock";
@@ -106,7 +106,7 @@ export interface IWorkflowDaprLockNode extends IWorkflowActionNode<"lock"> {
     };
 }
 
-export interface IWorkflowDaprWorkflowNode extends IWorkflowActionNode<"workflow"> {
+export interface IWorkflowDaprWorkflowNode <N extends string> extends IWorkflowActionNode<N, "workflow"> {
     actionType: "workflow";
     properties: {
         operation: "start" | "terminate" | "pause" | "resume" | "raiseEvent" | "getStatus" | "purge";
@@ -119,7 +119,7 @@ export interface IWorkflowDaprWorkflowNode extends IWorkflowActionNode<"workflow
     };
 }
 
-export interface IWorkflowDaprActivityCallNode extends IWorkflowActionNode<"daprActivity"> {
+export interface IWorkflowDaprActivityCallNode <N extends string> extends IWorkflowActionNode<N, "daprActivity"> {
     actionType: "daprActivity";
     properties: {
         activityName: string;
@@ -134,7 +134,7 @@ export interface IWorkflowDaprActivityCallNode extends IWorkflowActionNode<"dapr
     };
 }
 
-export interface IWorkflowDaprSubWorkflowNode extends IWorkflowActionNode<"daprSubWorkflow"> {
+export interface IWorkflowDaprSubWorkflowNode <N extends string> extends IWorkflowActionNode<N, "daprSubWorkflow"> {
     actionType: "daprSubWorkflow";
     properties: {
         workflowName: string;
@@ -150,7 +150,7 @@ export interface IWorkflowDaprSubWorkflowNode extends IWorkflowActionNode<"daprS
     };
 }
 
-export interface IWorkflowDaprTimerNode extends IWorkflowActionNode<"daprTimer"> {
+export interface IWorkflowDaprTimerNode <N extends string> extends IWorkflowActionNode<N, "daprTimer"> {
     actionType: "daprTimer";
     properties: {
         duration: string;
@@ -158,7 +158,7 @@ export interface IWorkflowDaprTimerNode extends IWorkflowActionNode<"daprTimer">
     };
 }
 
-export interface IWorkflowDaprWaitForExternalEventNode extends IWorkflowActionNode<"daprWaitForExternalEvent"> {
+export interface IWorkflowDaprWaitForExternalEventNode <N extends string> extends IWorkflowActionNode<N, "daprWaitForExternalEvent"> {
     actionType: "daprWaitForExternalEvent";
     properties: {
         eventName: string;
@@ -166,7 +166,7 @@ export interface IWorkflowDaprWaitForExternalEventNode extends IWorkflowActionNo
     };
 }
 
-export interface IWorkflowDaprParallelNode extends IWorkflowActionNode<"daprParallel"> {
+export interface IWorkflowDaprParallelNode <N extends string> extends IWorkflowActionNode<N, "daprParallel"> {
     actionType: "daprParallel";
     properties: {
         tasks: {
@@ -178,7 +178,7 @@ export interface IWorkflowDaprParallelNode extends IWorkflowActionNode<"daprPara
     };
 }
 
-export interface IWorkflowDaprContinueAsNewNode extends IWorkflowActionNode<"daprContinueAsNew"> {
+export interface IWorkflowDaprContinueAsNewNode <N extends string> extends IWorkflowActionNode<N, "daprContinueAsNew"> {
     actionType: "daprContinueAsNew";
     properties: {
         input?: any;
@@ -186,19 +186,19 @@ export interface IWorkflowDaprContinueAsNewNode extends IWorkflowActionNode<"dap
     };
 }
 
-export type IWorkflowDaprNodes = 
-    | IWorkflowDaprStateStoreNode 
-    | IWorkflowDaprPubSubNode 
-    | IWorkflowDaprServiceInvocationNode 
-    | IWorkflowDaprBindingNode 
-    | IWorkflowDaprSecretsNode 
-    | IWorkflowDaprConfigurationNode 
-    | IWorkflowDaprLockNode 
-    | IWorkflowDaprWorkflowNode
-    | IWorkflowDaprActivityCallNode
-    | IWorkflowDaprSubWorkflowNode
-    | IWorkflowDaprTimerNode
-    | IWorkflowDaprWaitForExternalEventNode
-    | IWorkflowDaprParallelNode
-    | IWorkflowDaprContinueAsNewNode;
+export type IWorkflowDaprNodes<N extends string> = 
+    | IWorkflowDaprStateStoreNode <N>
+    | IWorkflowDaprPubSubNode <N>
+    | IWorkflowDaprServiceInvocationNode <N>
+    | IWorkflowDaprBindingNode <N>
+    | IWorkflowDaprSecretsNode <N>
+    | IWorkflowDaprConfigurationNode <N>
+    | IWorkflowDaprLockNode <N>
+    | IWorkflowDaprWorkflowNode<N>
+    | IWorkflowDaprActivityCallNode<N>
+    | IWorkflowDaprSubWorkflowNode<N>
+    | IWorkflowDaprTimerNode<N>
+    | IWorkflowDaprWaitForExternalEventNode<N>
+    | IWorkflowDaprParallelNode<N>
+    | IWorkflowDaprContinueAsNewNode<N>;
 // #endregion

@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Security & Authentication Nodes
-export interface IWorkflowAuthenticationNode extends IWorkflowActionNode<"authentication"> {
+export interface IWorkflowAuthenticationNode <N extends string> extends IWorkflowActionNode<N, "authentication"> {
     actionType: "authentication";
     properties: {
         provider: "oauth2" | "jwt" | "basic" | "apiKey" | "saml" | "ldap" | "custom";
@@ -25,7 +25,7 @@ export interface IWorkflowAuthenticationNode extends IWorkflowActionNode<"authen
     };
 }
 
-export interface IWorkflowEncryptionNode extends IWorkflowActionNode<"encryption"> {
+export interface IWorkflowEncryptionNode <N extends string> extends IWorkflowActionNode<N, "encryption"> {
     actionType: "encryption";
     properties: {
         operation: "encrypt" | "decrypt" | "hash" | "sign" | "verify";
@@ -40,7 +40,7 @@ export interface IWorkflowEncryptionNode extends IWorkflowActionNode<"encryption
     };
 }
 
-export interface IWorkflowRateLimitNode extends IWorkflowActionNode<"rateLimit"> {
+export interface IWorkflowRateLimitNode <N extends string> extends IWorkflowActionNode<N, "rateLimit"> {
     actionType: "rateLimit";
     properties: {
         strategy: "fixed" | "sliding" | "token_bucket" | "leaky_bucket";
@@ -60,7 +60,7 @@ export interface IWorkflowRateLimitNode extends IWorkflowActionNode<"rateLimit">
     };
 }
 
-export interface IWorkflowValidationNode extends IWorkflowActionNode<"validation"> {
+export interface IWorkflowValidationNode <N extends string> extends IWorkflowActionNode<N, "validation"> {
     actionType: "validation";
     properties: {
         validationType: "input" | "output" | "both";
@@ -80,9 +80,9 @@ export interface IWorkflowValidationNode extends IWorkflowActionNode<"validation
     };
 }
 
-export type IWorkflowSecurityNodes = 
-    | IWorkflowAuthenticationNode 
-    | IWorkflowEncryptionNode 
-    | IWorkflowRateLimitNode
-    | IWorkflowValidationNode;
+export type IWorkflowSecurityNodes<N extends string> = 
+    | IWorkflowAuthenticationNode <N>
+    | IWorkflowEncryptionNode <N>
+    | IWorkflowRateLimitNode<N>
+    | IWorkflowValidationNode<N>;
 // #endregion

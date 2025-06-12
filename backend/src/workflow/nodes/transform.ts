@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Data Transformation Nodes
-export interface IWorkflowDataTransformNode extends IWorkflowActionNode<"dataTransform"> {
+export interface IWorkflowDataTransformNode <N extends string> extends IWorkflowActionNode<N, "dataTransform"> {
     actionType: "dataTransform";
     properties: {
         operation: "map" | "filter" | "reduce" | "sort" | "group" | "merge" | "split";
@@ -17,7 +17,7 @@ export interface IWorkflowDataTransformNode extends IWorkflowActionNode<"dataTra
     };
 }
 
-export interface IWorkflowDataValidationNode extends IWorkflowActionNode<"dataValidation"> {
+export interface IWorkflowDataValidationNode <N extends string> extends IWorkflowActionNode<N, "dataValidation"> {
     actionType: "dataValidation";
     properties: {
         schema: any; // JSON Schema
@@ -37,7 +37,7 @@ export interface IWorkflowDataValidationNode extends IWorkflowActionNode<"dataVa
     };
 }
 
-export interface IWorkflowCSVProcessorNode extends IWorkflowActionNode<"csvProcessor"> {
+export interface IWorkflowCSVProcessorNode <N extends string> extends IWorkflowActionNode<N, "csvProcessor"> {
     actionType: "csvProcessor";
     properties: {
         operation: "parse" | "generate" | "filter" | "transform";
@@ -58,7 +58,7 @@ export interface IWorkflowCSVProcessorNode extends IWorkflowActionNode<"csvProce
     };
 }
 
-export interface IWorkflowJSONProcessorNode extends IWorkflowActionNode<"jsonProcessor"> {
+export interface IWorkflowJSONProcessorNode <N extends string> extends IWorkflowActionNode<N, "jsonProcessor"> {
     actionType: "jsonProcessor";
     properties: {
         operation: "parse" | "stringify" | "extract" | "transform" | "validate";
@@ -75,7 +75,7 @@ export interface IWorkflowJSONProcessorNode extends IWorkflowActionNode<"jsonPro
     };
 }
 
-export interface IWorkflowXMLProcessorNode extends IWorkflowActionNode<"xmlProcessor"> {
+export interface IWorkflowXMLProcessorNode <N extends string> extends IWorkflowActionNode<N, "xmlProcessor"> {
     actionType: "xmlProcessor";
     properties: {
         operation: "parse" | "generate" | "transform" | "validate";
@@ -89,10 +89,10 @@ export interface IWorkflowXMLProcessorNode extends IWorkflowActionNode<"xmlProce
     };
 }
 
-export type IWorkflowDataTransformationNodes = 
-    | IWorkflowDataTransformNode 
-    | IWorkflowDataValidationNode 
-    | IWorkflowCSVProcessorNode
-    | IWorkflowJSONProcessorNode
-    | IWorkflowXMLProcessorNode;
+export type IWorkflowDataTransformationNodes<N extends string> = 
+    | IWorkflowDataTransformNode <N>
+    | IWorkflowDataValidationNode <N>
+    | IWorkflowCSVProcessorNode<N>
+    | IWorkflowJSONProcessorNode<N>
+    | IWorkflowXMLProcessorNode<N>;
 // #endregion

@@ -1,7 +1,7 @@
 import { IWorkflowResponseNode } from "./base";
 
 // #region Response Nodes
-export interface IWorkflowWebhookResponseNode extends IWorkflowResponseNode<"webhookResponse"> {
+export interface IWorkflowWebhookResponseNode <N extends string> extends IWorkflowResponseNode<N, "webhookResponse"> {
     responseType: "webhookResponse";
     properties: {
         statusCode: number;
@@ -32,7 +32,7 @@ export interface IWorkflowWebhookResponseNode extends IWorkflowResponseNode<"web
     };
 }
 
-export interface IWorkflowHttpResponseNode extends IWorkflowResponseNode<"httpResponse"> {
+export interface IWorkflowHttpResponseNode <N extends string> extends IWorkflowResponseNode<N, "httpResponse"> {
     responseType: "httpResponse";
     properties: {
         statusCode: number;
@@ -53,7 +53,7 @@ export interface IWorkflowHttpResponseNode extends IWorkflowResponseNode<"httpRe
     };
 }
 
-export interface IWorkflowApiResponseNode extends IWorkflowResponseNode<"apiResponse"> {
+export interface IWorkflowApiResponseNode <N extends string> extends IWorkflowResponseNode<N, "apiResponse"> {
     responseType: "apiResponse";
     properties: {
         statusCode: number;
@@ -87,8 +87,8 @@ export interface IWorkflowApiResponseNode extends IWorkflowResponseNode<"apiResp
     };
 }
 
-export interface IWorkflowWebhookSuccessResponseNode extends IWorkflowWebhookResponseNode {
-    properties: IWorkflowWebhookResponseNode['properties'] & {
+export interface IWorkflowWebhookSuccessResponseNode <N extends string> extends IWorkflowWebhookResponseNode<N> {
+    properties: IWorkflowWebhookResponseNode<N>['properties'] & {
         statusCode: 200 | 201 | 202 | 204;
         successMessage?: string;
         acknowledgment?: {
@@ -99,8 +99,8 @@ export interface IWorkflowWebhookSuccessResponseNode extends IWorkflowWebhookRes
     };
 }
 
-export interface IWorkflowWebhookErrorResponseNode extends IWorkflowWebhookResponseNode {
-    properties: IWorkflowWebhookResponseNode['properties'] & {
+export interface IWorkflowWebhookErrorResponseNode <N extends string> extends IWorkflowWebhookResponseNode<N> {
+    properties: IWorkflowWebhookResponseNode<N>['properties'] & {
         statusCode: 400 | 401 | 403 | 404 | 409 | 422 | 429 | 500 | 502 | 503;
         error: {
             code: string;
@@ -112,8 +112,8 @@ export interface IWorkflowWebhookErrorResponseNode extends IWorkflowWebhookRespo
     };
 }
 
-export interface IWorkflowWebhookAsyncResponseNode extends IWorkflowWebhookResponseNode {
-    properties: IWorkflowWebhookResponseNode['properties'] & {
+export interface IWorkflowWebhookAsyncResponseNode <N extends string> extends IWorkflowWebhookResponseNode<N> {
+    properties: IWorkflowWebhookResponseNode<N>['properties'] & {
         statusCode: 202;
         callbackUrl?: string;
         pollUrl?: string;
@@ -123,20 +123,20 @@ export interface IWorkflowWebhookAsyncResponseNode extends IWorkflowWebhookRespo
     };
 }
 
-export interface IWorkflowConditionalResponseNode extends IWorkflowResponseNode<"conditionalResponse"> {
+export interface IWorkflowConditionalResponseNode <N extends string> extends IWorkflowResponseNode<N, "conditionalResponse"> {
     responseType: "conditionalResponse";
     properties: {
         conditions: {
             field: string;
             operator: "equals" | "notEquals" | "contains" | "notContains" | "greaterThan" | "lessThan" | "isEmpty" | "isNotEmpty";
             value: any;
-            response: IWorkflowWebhookResponseNode | IWorkflowHttpResponseNode | IWorkflowApiResponseNode;
+            response: IWorkflowWebhookResponseNode<N> | IWorkflowHttpResponseNode<N> | IWorkflowApiResponseNode<N>;
         }[];
-        defaultResponse: IWorkflowWebhookResponseNode | IWorkflowHttpResponseNode | IWorkflowApiResponseNode;
+        defaultResponse: IWorkflowWebhookResponseNode<N> | IWorkflowHttpResponseNode<N> | IWorkflowApiResponseNode<N>;
     };
 }
 
-export interface IWorkflowResponseTemplateNode extends IWorkflowResponseNode<"responseTemplate"> {
+export interface IWorkflowResponseTemplateNode <N extends string> extends IWorkflowResponseNode<N, "responseTemplate"> {
     responseType: "responseTemplate";
     properties: {
         template: {
@@ -157,13 +157,13 @@ export interface IWorkflowResponseTemplateNode extends IWorkflowResponseNode<"re
     };
 }
 
-export type IWorkflowResponseNodes = 
-    | IWorkflowWebhookResponseNode 
-    | IWorkflowHttpResponseNode 
-    | IWorkflowApiResponseNode
-    | IWorkflowWebhookSuccessResponseNode
-    | IWorkflowWebhookErrorResponseNode
-    | IWorkflowWebhookAsyncResponseNode
-    | IWorkflowConditionalResponseNode
-    | IWorkflowResponseTemplateNode;
+export type IWorkflowResponseNodes<N extends string> = 
+    | IWorkflowWebhookResponseNode <N>
+    | IWorkflowHttpResponseNode <N>
+    | IWorkflowApiResponseNode<N>
+    | IWorkflowWebhookSuccessResponseNode<N>
+    | IWorkflowWebhookErrorResponseNode<N>
+    | IWorkflowWebhookAsyncResponseNode<N>
+    | IWorkflowConditionalResponseNode<N>
+    | IWorkflowResponseTemplateNode<N>;
 // #endregion

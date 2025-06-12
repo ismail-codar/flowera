@@ -1,4 +1,4 @@
-Generate data with IWorkflowNode type like the following mermaid graph
+Generate data with IWorkflow type like the following mermaid graph
 
 graph TD
 

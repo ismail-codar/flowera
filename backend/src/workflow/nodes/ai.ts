@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region AI & Machine Learning Nodes
-export interface IWorkflowOpenAINode extends IWorkflowActionNode<"openai"> {
+export interface IWorkflowOpenAINode <N extends string> extends IWorkflowActionNode<N, "openai"> {
     actionType: "openai";
     properties: {
         operation: "chat" | "completion" | "embedding" | "image" | "audio" | "moderation";
@@ -23,7 +23,7 @@ export interface IWorkflowOpenAINode extends IWorkflowActionNode<"openai"> {
     };
 }
 
-export interface IWorkflowAzureOpenAINode extends IWorkflowActionNode<"azureOpenAI"> {
+export interface IWorkflowAzureOpenAINode <N extends string> extends IWorkflowActionNode<N, "azureOpenAI"> {
     actionType: "azureOpenAI";
     properties: {
         endpoint: string;
@@ -41,7 +41,7 @@ export interface IWorkflowAzureOpenAINode extends IWorkflowActionNode<"azureOpen
     };
 }
 
-export interface IWorkflowImageRecognitionNode extends IWorkflowActionNode<"imageRecognition"> {
+export interface IWorkflowImageRecognitionNode <N extends string> extends IWorkflowActionNode<N, "imageRecognition"> {
     actionType: "imageRecognition";
     properties: {
         provider: "azure" | "aws" | "google" | "openai";
@@ -53,7 +53,7 @@ export interface IWorkflowImageRecognitionNode extends IWorkflowActionNode<"imag
     };
 }
 
-export interface IWorkflowSentimentAnalysisNode extends IWorkflowActionNode<"sentimentAnalysis"> {
+export interface IWorkflowSentimentAnalysisNode <N extends string> extends IWorkflowActionNode<N, "sentimentAnalysis"> {
     actionType: "sentimentAnalysis";
     properties: {
         provider: "azure" | "aws" | "google" | "openai";
@@ -63,7 +63,7 @@ export interface IWorkflowSentimentAnalysisNode extends IWorkflowActionNode<"sen
     };
 }
 
-export interface IWorkflowTextTranslationNode extends IWorkflowActionNode<"textTranslation"> {
+export interface IWorkflowTextTranslationNode <N extends string> extends IWorkflowActionNode<N, "textTranslation"> {
     actionType: "textTranslation";
     properties: {
         provider: "azure" | "aws" | "google";
@@ -74,10 +74,10 @@ export interface IWorkflowTextTranslationNode extends IWorkflowActionNode<"textT
     };
 }
 
-export type IWorkflowAINodes = 
-    | IWorkflowOpenAINode 
-    | IWorkflowAzureOpenAINode 
-    | IWorkflowImageRecognitionNode 
-    | IWorkflowSentimentAnalysisNode
-    | IWorkflowTextTranslationNode;
+export type IWorkflowAINodes<N extends string> = 
+    | IWorkflowOpenAINode <N>
+    | IWorkflowAzureOpenAINode <N>
+    | IWorkflowImageRecognitionNode <N>
+    | IWorkflowSentimentAnalysisNode<N>
+    | IWorkflowTextTranslationNode<N>;
 // #endregion

@@ -1,7 +1,16 @@
 import { IWorkflow } from '../src/workflow/nodes/_all';
 
 // Define the nodes based on the mermaid graph
-const manualApprovalWorkflow: IWorkflow = {
+const manualApprovalWorkflow: IWorkflow<
+'Manuel Tetikleme' 
+| 'Onay E-postası Gönder' 
+| 'Webhook - Onay Yanıtı' 
+| 'Karar Kontrolü'
+| 'Onay Sonucu Bildir'
+| 'Onay Teşekkür Sayfası'
+| 'Red Sonucu Bildir'
+| 'Red Teşekkür Sayfası'
+> = {
     nodes: [
         {
           name: 'Manuel Tetikleme',
@@ -90,10 +99,13 @@ const manualApprovalWorkflow: IWorkflow = {
         },
       ],
       edges: [
-        {
-            source: 'node1',
-            target: 'node2',
-        },
+        { source: "Manuel Tetikleme", target: "Onay E-postası Gönder" },
+        { source: "Onay E-postası Gönder", target: "Webhook - Onay Yanıtı" },
+        { source: "Webhook - Onay Yanıtı", target: "Karar Kontrolü" },
+        { source: "Karar Kontrolü", target: "Onay Sonucu Bildir", label: "Onay" },
+        { source: "Onay Sonucu Bildir", target: "Onay Teşekkür Sayfası" },
+        { source: "Karar Kontrolü", target: "Red Sonucu Bildir", label: "Red" },
+        { source: "Red Sonucu Bildir", target: "Red Teşekkür Sayfası" },
       ],
 };
 

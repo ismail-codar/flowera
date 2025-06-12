@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Human Interaction Nodes
-export interface IWorkflowApprovalNode extends IWorkflowActionNode<"approval"> {
+export interface IWorkflowApprovalNode <N extends string> extends IWorkflowActionNode<N, "approval"> {
     actionType: "approval";
     properties: {
         approvers: string[];
@@ -24,7 +24,7 @@ export interface IWorkflowApprovalNode extends IWorkflowActionNode<"approval"> {
     };
 }
 
-export interface IWorkflowUserInputNode extends IWorkflowActionNode<"userInput"> {
+export interface IWorkflowUserInputNode <N extends string> extends IWorkflowActionNode<N, "userInput"> {
     actionType: "userInput";
     properties: {
         title: string;
@@ -50,7 +50,7 @@ export interface IWorkflowUserInputNode extends IWorkflowActionNode<"userInput">
     };
 }
 
-export interface IWorkflowNotificationNode extends IWorkflowActionNode<"notification"> {
+export interface IWorkflowNotificationNode <N extends string> extends IWorkflowActionNode<N, "notification"> {
     actionType: "notification";
     properties: {
         channels: ("email" | "sms" | "push" | "slack" | "teams" | "webhook")[];
@@ -73,7 +73,7 @@ export interface IWorkflowNotificationNode extends IWorkflowActionNode<"notifica
     };
 }
 
-export interface IWorkflowSurveyNode extends IWorkflowActionNode<"survey"> {
+export interface IWorkflowSurveyNode <N extends string> extends IWorkflowActionNode<N, "survey"> {
     actionType: "survey";
     properties: {
         title: string;
@@ -97,9 +97,9 @@ export interface IWorkflowSurveyNode extends IWorkflowActionNode<"survey"> {
     };
 }
 
-export type IWorkflowHumanInteractionNodes = 
-    | IWorkflowApprovalNode 
-    | IWorkflowUserInputNode 
-    | IWorkflowNotificationNode
-    | IWorkflowSurveyNode;
+export type IWorkflowHumanInteractionNodes<N extends string> = 
+    | IWorkflowApprovalNode <N>
+    | IWorkflowUserInputNode <N>
+    | IWorkflowNotificationNode<N>
+    | IWorkflowSurveyNode<N>;
 // #endregion

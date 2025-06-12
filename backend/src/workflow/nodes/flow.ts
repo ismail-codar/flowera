@@ -1,7 +1,7 @@
 import { IWorkflowActionNode, IWorkflowConditionNode } from "./base";
 
 // #region Flow Control Nodes
-export interface IWorkflowIfNode extends IWorkflowConditionNode<"if"> {
+export interface IWorkflowIfNode <N extends string> extends IWorkflowConditionNode<N, "if"> {
     conditionType: "if";
     properties: {
         conditions: {
@@ -15,7 +15,7 @@ export interface IWorkflowIfNode extends IWorkflowConditionNode<"if"> {
     };
 }
 
-export interface IWorkflowSwitchNode extends IWorkflowConditionNode<"switch"> {
+export interface IWorkflowSwitchNode <N extends string> extends IWorkflowConditionNode<N, "switch"> {
     conditionType: "switch";
     properties: {
         field: string;
@@ -27,7 +27,7 @@ export interface IWorkflowSwitchNode extends IWorkflowConditionNode<"switch"> {
     };
 }
 
-export interface IWorkflowFilterNode extends IWorkflowConditionNode<"filter"> {
+export interface IWorkflowFilterNode <N extends string> extends IWorkflowConditionNode<N, "filter"> {
     conditionType: "filter";
     properties: {
         conditions: {
@@ -40,7 +40,7 @@ export interface IWorkflowFilterNode extends IWorkflowConditionNode<"filter"> {
     };
 }
 
-export interface IWorkflowLoopNode extends IWorkflowConditionNode<"loop"> {
+export interface IWorkflowLoopNode <N extends string> extends IWorkflowConditionNode<N, "loop"> {
     conditionType: "loop";
     properties: {
         loopType: "forEach" | "while" | "doWhile" | "for";
@@ -60,7 +60,7 @@ export interface IWorkflowLoopNode extends IWorkflowConditionNode<"loop"> {
     };
 }
 
-export interface IWorkflowParallelNode extends IWorkflowConditionNode<"parallel"> {
+export interface IWorkflowParallelNode <N extends string> extends IWorkflowConditionNode<N, "parallel"> {
     conditionType: "parallel";
     properties: {
         branches: {
@@ -73,7 +73,7 @@ export interface IWorkflowParallelNode extends IWorkflowConditionNode<"parallel"
     };
 }
 
-export interface IWorkflowDelayNode extends IWorkflowActionNode<"delay"> {
+export interface IWorkflowDelayNode <N extends string> extends IWorkflowActionNode<N, "delay"> {
     actionType: "delay";
     properties: {
         duration: number;
@@ -85,11 +85,12 @@ export interface IWorkflowDelayNode extends IWorkflowActionNode<"delay"> {
     };
 }
 
-export type IWorkflowFlowControlNodes = 
-    | IWorkflowIfNode 
-    | IWorkflowSwitchNode 
-    | IWorkflowFilterNode
-    | IWorkflowLoopNode
-    | IWorkflowParallelNode
-    | IWorkflowDelayNode;
+
+export type IWorkflowFlowControlNodes<N extends string> = 
+    | IWorkflowIfNode <N>
+    | IWorkflowSwitchNode <N>
+    | IWorkflowFilterNode<N>
+    | IWorkflowLoopNode<N>
+    | IWorkflowParallelNode<N>
+    | IWorkflowDelayNode<N>;
 // #endregion

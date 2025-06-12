@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Integration Nodes
-export interface IWorkflowSlackNode extends IWorkflowActionNode<"slack"> {
+export interface IWorkflowSlackNode <N extends string> extends IWorkflowActionNode<N, "slack"> {
     actionType: "slack";
     properties: {
         operation: "sendMessage" | "updateMessage" | "deleteMessage" | "createChannel" | "inviteUser" | "uploadFile";
@@ -21,7 +21,7 @@ export interface IWorkflowSlackNode extends IWorkflowActionNode<"slack"> {
     };
 }
 
-export interface IWorkflowTeamsNode extends IWorkflowActionNode<"teams"> {
+export interface IWorkflowTeamsNode <N extends string> extends IWorkflowActionNode<N, "teams"> {
     actionType: "teams";
     properties: {
         operation: "sendMessage" | "sendCard" | "createMeeting" | "sendNotification";
@@ -43,7 +43,7 @@ export interface IWorkflowTeamsNode extends IWorkflowActionNode<"teams"> {
     };
 }
 
-export interface IWorkflowDiscordNode extends IWorkflowActionNode<"discord"> {
+export interface IWorkflowDiscordNode <N extends string> extends IWorkflowActionNode<N, "discord"> {
     actionType: "discord";
     properties: {
         operation: "sendMessage" | "sendEmbed" | "createInvite" | "manageRole";
@@ -67,7 +67,7 @@ export interface IWorkflowDiscordNode extends IWorkflowActionNode<"discord"> {
     };
 }
 
-export interface IWorkflowJiraNode extends IWorkflowActionNode<"jira"> {
+export interface IWorkflowJiraNode <N extends string> extends IWorkflowActionNode<N, "jira"> {
     actionType: "jira";
     properties: {
         operation: "createIssue" | "updateIssue" | "getIssue" | "searchIssues" | "addComment" | "transition";
@@ -89,7 +89,7 @@ export interface IWorkflowJiraNode extends IWorkflowActionNode<"jira"> {
     };
 }
 
-export interface IWorkflowGitHubNode extends IWorkflowActionNode<"github"> {
+export interface IWorkflowGitHubNode <N extends string> extends IWorkflowActionNode<N, "github"> {
     actionType: "github";
     properties: {
         operation: "createIssue" | "createPR" | "updateIssue" | "addComment" | "mergePR" | "createRelease";
@@ -111,7 +111,7 @@ export interface IWorkflowGitHubNode extends IWorkflowActionNode<"github"> {
     };
 }
 
-export interface IWorkflowTrelloNode extends IWorkflowActionNode<"trello"> {
+export interface IWorkflowTrelloNode <N extends string> extends IWorkflowActionNode<N, "trello"> {
     actionType: "trello";
     properties: {
         operation: "createCard" | "updateCard" | "moveCard" | "addComment" | "createList" | "createBoard";
@@ -132,11 +132,11 @@ export interface IWorkflowTrelloNode extends IWorkflowActionNode<"trello"> {
     };
 }
 
-export type IWorkflowIntegrationNodes = 
-    | IWorkflowSlackNode 
-    | IWorkflowTeamsNode 
-    | IWorkflowDiscordNode
-    | IWorkflowJiraNode
-    | IWorkflowGitHubNode
-    | IWorkflowTrelloNode;
+export type IWorkflowIntegrationNodes<N extends string> = 
+    | IWorkflowSlackNode <N>
+    | IWorkflowTeamsNode <N>
+    | IWorkflowDiscordNode<N>
+    | IWorkflowJiraNode<N>
+    | IWorkflowGitHubNode<N>
+    | IWorkflowTrelloNode<N>;
 // #endregion

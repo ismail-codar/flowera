@@ -13,33 +13,37 @@ import { IWorkflowSecurityNodes } from './security';
 import { IWorkflowTriggerNodes } from './trigger';
 
 // #region Final Union Types
-export type IWorkflowAllActionNodes = 
-    | IWorkflowBasicActionNodes
-    | IWorkflowAINodes
-    | IWorkflowDataStorageNodes
-    | IWorkflowDataTransformationNodes
-    | IWorkflowHumanInteractionNodes
-    | IWorkflowDaprNodes
-    | IWorkflowErrorHandlingNodes
-    | IWorkflowSecurityNodes
-    | IWorkflowIntegrationNodes
-    | IWorkflowCloudServicesNodes
-    | IWorkflowDelayNode;
+export type IWorkflowAllActionNodes<N extends string> = 
+    | IWorkflowBasicActionNodes<N>
+    | IWorkflowAINodes<N>
+    | IWorkflowDataStorageNodes<N>
+    | IWorkflowDataTransformationNodes<N>
+    | IWorkflowHumanInteractionNodes<N>
+    | IWorkflowDaprNodes<N>
+    | IWorkflowErrorHandlingNodes<N>
+    | IWorkflowSecurityNodes<N>
+    | IWorkflowIntegrationNodes<N>
+    | IWorkflowCloudServicesNodes<N>
+    | IWorkflowDelayNode<N>;
 
-export type IWorkflowAllConditionNodes = IWorkflowFlowControlNodes;
+export type IWorkflowAllConditionNodes<N extends string> = IWorkflowFlowControlNodes<N>;
 
-export type IWorkflowNode = 
-    | IWorkflowTriggerNodes
-    | IWorkflowAllActionNodes 
-    | IWorkflowAllConditionNodes 
-    | IWorkflowResponseNodes;
+export type IWorkflowNode<N extends string> = 
+    | IWorkflowTriggerNodes<N>
+    | IWorkflowAllActionNodes<N> 
+    | IWorkflowAllConditionNodes<N> 
+    | IWorkflowResponseNodes<N>;
 // #endregion
 
-export interface IWorkflow {
-    nodes: IWorkflowNode[];
+// interface IWorkflowNode1<N> {
+//     name: N
+// }
+
+export interface IWorkflow<N extends string> {
+    nodes: IWorkflowNode<N>[];
     edges: {
         label?: string;
-        source: string;
-        target: string;
+        source: N;
+        target: N;
     }[];
 }

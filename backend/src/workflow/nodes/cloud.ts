@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Cloud Services Nodes
-export interface IWorkflowAWSS3Node extends IWorkflowActionNode<"awsS3"> {
+export interface IWorkflowAWSS3Node <N extends string> extends IWorkflowActionNode<N, "awsS3"> {
     actionType: "awsS3";
     properties: {
         operation: "upload" | "download" | "delete" | "list" | "copy" | "getPresignedUrl";
@@ -21,7 +21,7 @@ export interface IWorkflowAWSS3Node extends IWorkflowActionNode<"awsS3"> {
     };
 }
 
-export interface IWorkflowAzureBlobNode extends IWorkflowActionNode<"azureBlob"> {
+export interface IWorkflowAzureBlobNode <N extends string> extends IWorkflowActionNode<N, "azureBlob"> {
     actionType: "azureBlob";
     properties: {
         operation: "upload" | "download" | "delete" | "list" | "copy";
@@ -38,7 +38,7 @@ export interface IWorkflowAzureBlobNode extends IWorkflowActionNode<"azureBlob">
     };
 }
 
-export interface IWorkflowGoogleCloudStorageNode extends IWorkflowActionNode<"gcs"> {
+export interface IWorkflowGoogleCloudStorageNode <N extends string> extends IWorkflowActionNode<N, "gcs"> {
     actionType: "gcs";
     properties: {
         operation: "upload" | "download" | "delete" | "list" | "copy";
@@ -57,7 +57,7 @@ export interface IWorkflowGoogleCloudStorageNode extends IWorkflowActionNode<"gc
     };
 }
 
-export interface IWorkflowAWSLambdaNode extends IWorkflowActionNode<"awsLambda"> {
+export interface IWorkflowAWSLambdaNode <N extends string> extends IWorkflowActionNode<N, "awsLambda"> {
     actionType: "awsLambda";
     properties: {
         operation: "invoke" | "invokeAsync";
@@ -72,7 +72,7 @@ export interface IWorkflowAWSLambdaNode extends IWorkflowActionNode<"awsLambda">
     };
 }
 
-export interface IWorkflowAzureFunctionNode extends IWorkflowActionNode<"azureFunction"> {
+export interface IWorkflowAzureFunctionNode <N extends string> extends IWorkflowActionNode<N, "azureFunction"> {
     actionType: "azureFunction";
     properties: {
         functionUrl: string;
@@ -84,7 +84,7 @@ export interface IWorkflowAzureFunctionNode extends IWorkflowActionNode<"azureFu
     };
 }
 
-export interface IWorkflowGoogleCloudFunctionNode extends IWorkflowActionNode<"gcf"> {
+export interface IWorkflowGoogleCloudFunctionNode <N extends string> extends IWorkflowActionNode<N, "gcf"> {
     actionType: "gcf";
     properties: {
         functionUrl: string;
@@ -100,11 +100,11 @@ export interface IWorkflowGoogleCloudFunctionNode extends IWorkflowActionNode<"g
     };
 }
 
-export type IWorkflowCloudServicesNodes = 
-    | IWorkflowAWSS3Node 
-    | IWorkflowAzureBlobNode 
-    | IWorkflowGoogleCloudStorageNode
-    | IWorkflowAWSLambdaNode
-    | IWorkflowAzureFunctionNode
-    | IWorkflowGoogleCloudFunctionNode;
+export type IWorkflowCloudServicesNodes<N extends string> = 
+    | IWorkflowAWSS3Node <N>
+    | IWorkflowAzureBlobNode <N>
+    | IWorkflowGoogleCloudStorageNode<N>
+    | IWorkflowAWSLambdaNode<N>
+    | IWorkflowAzureFunctionNode<N>
+    | IWorkflowGoogleCloudFunctionNode<N>;
 // #endregion

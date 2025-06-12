@@ -1,11 +1,11 @@
 import { IWorkflowTriggerNode } from "./base";
 
 // #region Trigger Nodes
-export interface IWorkflowManuelTriggerNode extends IWorkflowTriggerNode<"manuel"> {
+export interface IWorkflowManuelTriggerNode <N extends string> extends IWorkflowTriggerNode<N, "manuel"> {
     triggerType: "manuel";
 }
 
-export interface IWorkflowTimerTriggerNode extends IWorkflowTriggerNode<"timer"> {
+export interface IWorkflowTimerTriggerNode <N extends string> extends IWorkflowTriggerNode<N, "timer"> {
     triggerType: "timer";
     properties: {
         interval: number;
@@ -15,7 +15,7 @@ export interface IWorkflowTimerTriggerNode extends IWorkflowTriggerNode<"timer">
     };
 }
 
-export interface IWorkflowWebhookTriggerNode extends IWorkflowTriggerNode<"webhook"> {
+export interface IWorkflowWebhookTriggerNode <N extends string> extends IWorkflowTriggerNode<N, "webhook"> {
     triggerType: "webhook";
     properties: {
         path: string;
@@ -25,7 +25,7 @@ export interface IWorkflowWebhookTriggerNode extends IWorkflowTriggerNode<"webho
     };
 }
 
-export interface IWorkflowScheduleTriggerNode extends IWorkflowTriggerNode<"schedule"> {
+export interface IWorkflowScheduleTriggerNode <N extends string> extends IWorkflowTriggerNode<N, "schedule"> {
     triggerType: "schedule";
     properties: {
         cronExpression: string;
@@ -36,7 +36,7 @@ export interface IWorkflowScheduleTriggerNode extends IWorkflowTriggerNode<"sche
     };
 }
 
-export interface IWorkflowFileTriggerNode extends IWorkflowTriggerNode<"file"> {
+export interface IWorkflowFileTriggerNode <N extends string> extends IWorkflowTriggerNode<N, "file"> {
     triggerType: "file";
     properties: {
         watchPath: string;
@@ -47,7 +47,7 @@ export interface IWorkflowFileTriggerNode extends IWorkflowTriggerNode<"file"> {
     };
 }
 
-export interface IWorkflowEmailTriggerNode extends IWorkflowTriggerNode<"email"> {
+export interface IWorkflowEmailTriggerNode <N extends string> extends IWorkflowTriggerNode<N, "email"> {
     triggerType: "email";
     properties: {
         protocol: "IMAP" | "POP3";
@@ -66,11 +66,11 @@ export interface IWorkflowEmailTriggerNode extends IWorkflowTriggerNode<"email">
     };
 }
 
-export type IWorkflowTriggerNodes = 
-    | IWorkflowManuelTriggerNode 
-    | IWorkflowTimerTriggerNode 
-    | IWorkflowWebhookTriggerNode
-    | IWorkflowScheduleTriggerNode
-    | IWorkflowFileTriggerNode
-    | IWorkflowEmailTriggerNode;
+export type IWorkflowTriggerNodes<N extends string> = 
+    | IWorkflowManuelTriggerNode<N> 
+    | IWorkflowTimerTriggerNode<N> 
+    | IWorkflowWebhookTriggerNode<N>
+    | IWorkflowScheduleTriggerNode<N>
+    | IWorkflowFileTriggerNode<N>
+    | IWorkflowEmailTriggerNode<N>;
 // #endregion

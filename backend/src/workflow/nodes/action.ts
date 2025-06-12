@@ -1,7 +1,7 @@
 import { IWorkflowActionNode } from "./base";
 
 // #region Action Nodes
-export interface IWorkflowHttpRequestNode extends IWorkflowActionNode<"httpRequest"> {
+export interface IWorkflowHttpRequestNode <N extends string> extends IWorkflowActionNode<N, "httpRequest"> {
     actionType: "httpRequest";
     properties: {
         url: string;
@@ -17,7 +17,7 @@ export interface IWorkflowHttpRequestNode extends IWorkflowActionNode<"httpReque
     };
 }
 
-export interface IWorkflowMailNode extends IWorkflowActionNode<"mail"> {
+export interface IWorkflowMailNode<N extends string> extends IWorkflowActionNode<N, "mail"> {
     actionType: "mail";
     properties: {
         to: string[];
@@ -35,7 +35,7 @@ export interface IWorkflowMailNode extends IWorkflowActionNode<"mail"> {
     };
 }
 
-export interface IWorkflowScriptNode extends IWorkflowActionNode<"script"> {
+export interface IWorkflowScriptNode <N extends string> extends IWorkflowActionNode<N, "script"> {
     actionType: "script";
     properties: {
         language: "javascript" | "python" | "bash" | "powershell";
@@ -47,7 +47,7 @@ export interface IWorkflowScriptNode extends IWorkflowActionNode<"script"> {
     };
 }
 
-export interface IWorkflowFileOperationNode extends IWorkflowActionNode<"fileOperation"> {
+export interface IWorkflowFileOperationNode <N extends string> extends IWorkflowActionNode<N, "fileOperation"> {
     actionType: "fileOperation";
     properties: {
         operation: "read" | "write" | "copy" | "move" | "delete" | "compress" | "extract";
@@ -60,7 +60,7 @@ export interface IWorkflowFileOperationNode extends IWorkflowActionNode<"fileOpe
     };
 }
 
-export interface IWorkflowFTPNode extends IWorkflowActionNode<"ftp"> {
+export interface IWorkflowFTPNode <N extends string> extends IWorkflowActionNode<N, "ftp"> {
     actionType: "ftp";
     properties: {
         operation: "upload" | "download" | "list" | "delete" | "mkdir";
@@ -76,10 +76,11 @@ export interface IWorkflowFTPNode extends IWorkflowActionNode<"ftp"> {
     };
 }
 
-export type IWorkflowBasicActionNodes = 
-    | IWorkflowHttpRequestNode 
-    | IWorkflowMailNode 
-    | IWorkflowScriptNode
-    | IWorkflowFileOperationNode
-    | IWorkflowFTPNode;
+
+export type IWorkflowBasicActionNodes<N extends string> = 
+    | IWorkflowHttpRequestNode <N>
+    | IWorkflowMailNode <N>
+    | IWorkflowScriptNode<N>
+    | IWorkflowFileOperationNode<N>
+    | IWorkflowFTPNode<N>;
 // #endregion

@@ -1,27 +1,27 @@
 // #region Core Base Types
-interface IWorkflowBaseNode<T extends "trigger" | "action" | "condition" | "response"> {
-    name: string;
+interface IWorkflowBaseNode<N extends string,T extends "trigger" | "action" | "condition" | "response"> {
+    name: N;
     baseType: T;
     properties: {};
 }
 
 // Base node categories
-interface IWorkflowTriggerNode<T extends string> extends IWorkflowBaseNode<"trigger"> {
+interface IWorkflowTriggerNode<N extends string, T extends string> extends IWorkflowBaseNode<N,"trigger"> {
     baseType: 'trigger';
     triggerType: T;
 }
 
-interface IWorkflowActionNode<T extends string> extends IWorkflowBaseNode<"action"> {
+interface IWorkflowActionNode<N extends string, T extends string> extends IWorkflowBaseNode<N,"action"> {
     baseType: 'action';
     actionType: T;
 }
 
-interface IWorkflowConditionNode<T extends string> extends IWorkflowBaseNode<"condition"> {
+interface IWorkflowConditionNode<N extends string, T extends string> extends IWorkflowBaseNode<N,"condition"> {
     baseType: 'condition';
     conditionType: T;
 }
 
-interface IWorkflowResponseNode<T extends string> extends IWorkflowBaseNode<"response"> {
+interface IWorkflowResponseNode<N extends string, T extends string> extends IWorkflowBaseNode<N,"response"> {
     baseType: 'response';
     responseType: T;
 }
