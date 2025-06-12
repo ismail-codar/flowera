@@ -34,3 +34,12 @@ export type IWorkflowNode =
     | IWorkflowAllConditionNodes 
     | IWorkflowResponseNodes;
 // #endregion
+
+export interface IWorkflow {
+    nodes: IWorkflowNode[];
+    edges: {
+        label?: string;
+        source: string;
+        target: string;
+    }[];
+}

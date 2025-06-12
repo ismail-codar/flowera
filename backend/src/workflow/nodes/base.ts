@@ -1,6 +1,5 @@
 // #region Core Base Types
 interface IWorkflowBaseNode<T extends "trigger" | "action" | "condition" | "response"> {
-    id: string;
     name: string;
     baseType: T;
     properties: {};
