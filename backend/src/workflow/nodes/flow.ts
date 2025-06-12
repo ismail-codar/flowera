@@ -10,8 +10,8 @@ export interface IWorkflowIfNode <N extends string> extends IWorkflowConditionNo
             value: any;
             logicalOperator?: "AND" | "OR";
         }[];
-        trueBranch: string; // node id
-        falseBranch?: string; // node id
+        trueBranch: N; // node name
+        falseBranch?: N; // node name
     };
 }
 

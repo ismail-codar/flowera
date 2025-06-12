@@ -51,8 +51,8 @@ const manualApprovalWorkflow: IWorkflow<
                 value: 'approved',
               },
             ],
-            trueBranch: 'node5',
-            falseBranch: 'node7',
+            trueBranch: 'Onay Sonucu Bildir',
+            falseBranch: 'Red Sonucu Bildir',
           },
         },
         {
@@ -103,8 +103,8 @@ const manualApprovalWorkflow: IWorkflow<
         { source: "Onay E-postası Gönder", target: "Webhook - Onay Yanıtı" },
         { source: "Webhook - Onay Yanıtı", target: "Karar Kontrolü" },
         { source: "Karar Kontrolü", target: "Onay Sonucu Bildir", label: "Onay" },
-        { source: "Onay Sonucu Bildir", target: "Onay Teşekkür Sayfası" },
         { source: "Karar Kontrolü", target: "Red Sonucu Bildir", label: "Red" },
+        { source: "Onay Sonucu Bildir", target: "Onay Teşekkür Sayfası" },
         { source: "Red Sonucu Bildir", target: "Red Teşekkür Sayfası" },
       ],
 };
