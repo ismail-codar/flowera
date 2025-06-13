@@ -1,4 +1,4 @@
-import { IWorkflow } from "../src/workflow/nodes/_all";
+import type { IWorkflow } from "../src/workflow/nodes/_all";
 
 // Define the nodes based on the mermaid graph
 const manualApprovalWorkflow: IWorkflow<
