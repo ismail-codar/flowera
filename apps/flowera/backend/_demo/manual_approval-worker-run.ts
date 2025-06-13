@@ -1,6 +1,6 @@
 import { DaprWorkflowClient, WorkflowRuntime, DaprClient, CommunicationProtocolEnum } from "@dapr/dapr";
-import { createDaprWorkflow } from "../src/workflow/dapr/runner";
 import manualApprovalWorkflow from "./manual_approval";
+import { createDaprWorkflowFromGraph } from "../src/workflow/dapr/runner";
 
 const workflowWorker = new WorkflowRuntime();
 
@@ -17,9 +17,9 @@ async function start() {
     communicationProtocol: CommunicationProtocolEnum.GRPC,
   });
 
-  const manuelApprovalDaprWorkflow = createDaprWorkflow(manualApprovalWorkflow);
-  workflowWorker.registerWorkflowWithName(manuelApprovalDaprWorkflow.name, manuelApprovalDaprWorkflow.workflow);
-  for (const kv of manuelApprovalDaprWorkflow.activities.entries()) {
+  const manuelApproval = createDaprWorkflowFromGraph(manualApprovalWorkflow);
+  workflowWorker.registerWorkflowWithName(manuelApproval.name, manuelApproval.daprWorkflow);
+  for (const kv of manuelApproval.activities.entries()) {
     const activityName = kv[0];
     const activity = kv[1];
     workflowWorker.registerActivityWithName(activityName, activity);
@@ -35,7 +35,7 @@ async function start() {
 
   // Schedule a new orchestration
   try {
-    const id = await workflowClient.scheduleNewWorkflow(manuelApprovalDaprWorkflow.workflow, {});
+    const id = await workflowClient.scheduleNewWorkflow(manuelApproval.daprWorkflow, {});
     console.log(`Orchestration scheduled with ID: ${id}`);
 
     // Wait for orchestration completion
