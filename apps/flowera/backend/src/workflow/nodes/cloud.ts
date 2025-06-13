@@ -1,4 +1,4 @@
-import { IWorkflowActionNode } from "./base";
+import type { IWorkflowActionNode } from "./base";
 
 // #region Cloud Services Nodes
 export interface IWorkflowAWSS3Node<N extends string> extends IWorkflowActionNode<N, "awsS3"> {

@@ -27,4 +27,10 @@ interface IWorkflowResponseNode<N extends string, T extends string> extends IWor
 }
 // #endregion
 
-export { IWorkflowBaseNode, IWorkflowTriggerNode, IWorkflowActionNode, IWorkflowConditionNode, IWorkflowResponseNode };
+export type {
+  IWorkflowBaseNode,
+  IWorkflowTriggerNode,
+  IWorkflowActionNode,
+  IWorkflowConditionNode,
+  IWorkflowResponseNode,
+};

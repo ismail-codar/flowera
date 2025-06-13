@@ -1,4 +1,4 @@
-import { IWorkflowActionNode } from "./base";
+import type { IWorkflowActionNode } from "./base";
 
 // #region Action Nodes
 export interface IWorkflowHttpRequestNode<N extends string> extends IWorkflowActionNode<N, "httpRequest"> {

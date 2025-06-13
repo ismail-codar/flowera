@@ -96,9 +96,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flowera@workspace:.":
+"flowera-workspace@workspace:.":
   version: 0.0.0-use.local
-  resolution: "flowera@workspace:."
+  resolution: "flowera-workspace@workspace:."
   dependencies:
     "@biomejs/biome": "npm:^1.9.4"
   languageName: unknown
