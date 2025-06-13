@@ -101,21 +101,7 @@
     "enabled": true
   },
   "files": {
-    "include": [
-      "**/*.mjs",
-      "**/*.jsx",
-      "**/*.ts",
-      "**/*.tsx",
-      "**/*.css",
-      "**/*.scss"
-    ],
-    "ignore": [
-      "node_modules",
-      ".next",
-      "tmp",
-      "**/*.js",
-      "**/*.min.css",
-      "src/services/tys-api.ts"
-    ]
+    "include": ["**/*.mjs", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.css", "**/*.scss"],
+    "ignore": ["node_modules", ".next", "tmp", "**/*.js", "**/*.min.css", "src/services/tys-api.ts"]
   }
 }
