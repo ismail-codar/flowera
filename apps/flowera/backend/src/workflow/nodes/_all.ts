@@ -39,7 +39,8 @@ export type IWorkflowNode<N extends string> =
 //     name: N
 // }
 
-export interface IWorkflow<N extends string> {
+export interface IWorkflowGraph<N extends string> {
+  name: string;
   nodes: IWorkflowNode<N>[];
   edges: {
     label?: string;

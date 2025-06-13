@@ -1,7 +1,7 @@
-import type { IWorkflow } from "../src/workflow/nodes/_all";
+import type { IWorkflowGraph } from "../src/workflow/nodes/_all";
 
 // Define the nodes based on the mermaid graph
-const manualApprovalWorkflow: IWorkflow<
+const manualApprovalWorkflow: IWorkflowGraph<
   | "Manuel Tetikleme"
   | "Onay E-postası Gönder"
   | "Webhook - Onay Yanıtı"
@@ -11,6 +11,7 @@ const manualApprovalWorkflow: IWorkflow<
   | "Red Sonucu Bildir"
   | "Red Teşekkür Sayfası"
 > = {
+  name: "Manuel Onay Süreci",
   nodes: [
     {
       name: "Manuel Tetikleme",

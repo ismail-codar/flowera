@@ -17,10 +17,12 @@ async function start() {
     communicationProtocol: CommunicationProtocolEnum.GRPC,
   });
 
-  const daprWorkflow = createDaprWorkflow(manualApprovalWorkflow);
-  workflowWorker.registerWorkflow(daprWorkflow.workflow);
-  for (const activity of daprWorkflow.activities) {
-    workflowWorker.registerActivity(activity);
+  const manuelApprovalDaprWorkflow = createDaprWorkflow(manualApprovalWorkflow);
+  workflowWorker.registerWorkflowWithName(manuelApprovalDaprWorkflow.name, manuelApprovalDaprWorkflow.workflow);
+  for (const kv of manuelApprovalDaprWorkflow.activities.entries()) {
+    const activityName = kv[0];
+    const activity = kv[1];
+    workflowWorker.registerActivityWithName(activityName, activity);
   }
 
   // Wrap the worker startup in a try-catch block to handle any errors during startup
@@ -33,7 +35,7 @@ async function start() {
 
   // Schedule a new orchestration
   try {
-    const id = await workflowClient.scheduleNewWorkflow(daprWorkflow.workflow, {});
+    const id = await workflowClient.scheduleNewWorkflow(manuelApprovalDaprWorkflow.workflow, {});
     console.log(`Orchestration scheduled with ID: ${id}`);
 
     // Wait for orchestration completion
