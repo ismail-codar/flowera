@@ -28,7 +28,7 @@ export type IWorkflowAllActionNodes<N extends string> =
 
 export type IWorkflowAllConditionNodes<N extends string> = IWorkflowFlowControlNodes<N>;
 
-export type IWorkflowNode<N extends string> =
+export type IWorkflowNode<N extends string = string> =
   | IWorkflowTriggerNodes<N>
   | IWorkflowAllActionNodes<N>
   | IWorkflowAllConditionNodes<N>
@@ -39,7 +39,7 @@ export type IWorkflowNode<N extends string> =
 //     name: N
 // }
 
-export interface IWorkflowGraph<N extends string> {
+export interface IWorkflowGraph<N extends string = string> {
   name: string;
   nodes: IWorkflowNode<N>[];
   edges: {
