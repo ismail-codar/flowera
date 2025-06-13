@@ -2,27 +2,32 @@ import type { TWorkflow, WorkflowActivityContext, WorkflowContext } from "@dapr/
 import type { IWorkflowGraph, IWorkflowNode } from "../nodes/_all";
 import type { TWorkflowActivity } from "@dapr/dapr/types/workflow/Activity.type";
 import { findRootGraphNodes } from "../utils/graph-util";
-import type { IDaprWorkflowRunnerContext } from "./types";
+import type { IDaprActivityRunner, IDaprWorkflowRunnerContext } from "./types";
 
 export const createDaprWorkflowFromGraph = (wf: IWorkflowGraph) => {
   const workflowResult = new Map<string, any>();
-  const activityByName = new Map<string, TWorkflowActivity<any, any>>();
+  const activityByName = new Map<string, IDaprActivityRunner>();
 
-  const daprWorkflow: TWorkflow = async function* (ctx: WorkflowContext, payload: any): any {
+  const daprWorkflow: TWorkflow = async function* (daprContext: WorkflowContext, payload: any): any {
+    for (const node of wf.nodes) {
+      const activity = activityByName.get(node.name);
+      if (activity) {
+        activity.ctx.dapr = daprContext;
+      }
+    }
+
     const graphRoots = findRootGraphNodes(wf);
     for (const rootNode of graphRoots) {
-      const result = yield runGraphRootNode({
-        dapr: ctx,
-        graphNode: rootNode,
-        activityByName,
-        payload,
-      });
+      const result = yield runGraphRootNode(activityByName, rootNode.name);
       workflowResult.set(rootNode.name, result);
     }
   };
 
   for (const node of wf.nodes) {
-    const activity = worflowNodeToDaprActivity(node);
+    const activity = worflowNodeToDaprActivity({
+      dapr: undefined,
+      graphNode: node,
+    });
     activityByName.set(node.name, activity);
   }
 
@@ -34,19 +39,25 @@ export const createDaprWorkflowFromGraph = (wf: IWorkflowGraph) => {
   };
 };
 
-const worflowNodeToDaprActivity = (node: IWorkflowNode): TWorkflowActivity<any, any> => {
+const worflowNodeToDaprActivity = (ctx: IDaprWorkflowRunnerContext): IDaprActivityRunner => {
   // TODO node.baseType dan başlayarak node tipine göre işlem yaptırılacak
-  return async (_: WorkflowActivityContext, request: any) => {
-    return true;
+  const activity = {
+    ctx,
+    runner: async (_: WorkflowActivityContext, request: any) => {
+        yield ctx.dapr?.callActivity(ctx.graphNode, request);
+      return true;
+    },
   };
+
+  return activity;
 };
 
-const runGraphRootNode = function* (ctx: IDaprWorkflowRunnerContext) {
-  const activity = ctx.activityByName.get(ctx.graphNode.name);
-  if (activity) {
+const runGraphRootNode = function* (activityByName: Map<string, IDaprActivityRunner>, nodeName: string) {
+  const activity = activityByName.get(nodeName);
+  if (activity?.ctx.dapr) {
     // TODO activityInput hesaplanacak
     const activityInput = {};
-    yield ctx.dapr.callActivity(activity, activityInput);
+    yield activity.ctx.dapr.callActivity(activity.runner, activityInput);
   }
 };
 /** MAIL

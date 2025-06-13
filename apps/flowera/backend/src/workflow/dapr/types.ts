@@ -3,8 +3,11 @@ import { IWorkflowNode } from "../nodes/_all";
 import { TWorkflowActivity } from "@dapr/dapr/types/workflow/Activity.type";
 
 export interface IDaprWorkflowRunnerContext {
-  dapr: WorkflowContext;
+  dapr: WorkflowContext | undefined;
   graphNode: IWorkflowNode<any>;
-  activityByName: Map<string, TWorkflowActivity<any, any>>;
-  payload: any;
+}
+
+export interface IDaprActivityRunner {
+  ctx: IDaprWorkflowRunnerContext;
+  runner: TWorkflowActivity<any, any>;
 }

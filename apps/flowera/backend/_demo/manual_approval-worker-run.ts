@@ -1,6 +1,6 @@
 import { DaprWorkflowClient, WorkflowRuntime, DaprClient, CommunicationProtocolEnum } from "@dapr/dapr";
-import { createDaprWorkflow } from "../src/workflow/dapr/runner";
 import manualApprovalWorkflow from "./manual_approval";
+import { createDaprWorkflowFromGraph } from "../src/workflow/dapr/runner";
 
 const workflowWorker = new WorkflowRuntime();
 
@@ -17,12 +17,12 @@ async function start() {
     communicationProtocol: CommunicationProtocolEnum.GRPC,
   });
 
-  const manuelApprovalDaprWorkflow = createDaprWorkflow(manualApprovalWorkflow);
+  const manuelApprovalDaprWorkflow = createDaprWorkflowFromGraph(manualApprovalWorkflow);
   workflowWorker.registerWorkflowWithName(manuelApprovalDaprWorkflow.name, manuelApprovalDaprWorkflow.workflow);
   for (const kv of manuelApprovalDaprWorkflow.activities.entries()) {
     const activityName = kv[0];
-    const activity = kv[1];
-    workflowWorker.registerActivityWithName(activityName, activity);
+    const activityRunner = kv[1].runner;
+    workflowWorker.registerActivityWithName(activityName, activityRunner);
   }
 
   // Wrap the worker startup in a try-catch block to handle any errors during startup
