@@ -1,60 +1,73 @@
-import { DaprWorkflowClient, WorkflowRuntime, DaprClient, CommunicationProtocolEnum } from "@dapr/dapr";
+import { DaprWorkflowClient, WorkflowRuntime, DaprClient } from "@dapr/dapr";
+import { DaprServer, CommunicationProtocolEnum } from "@dapr/dapr";
+
+import express from "express";
+import bodyParser from "body-parser";
+import { type createDaprWorkflowFromGraph, registerWorkflowToDapr } from "../src/workflow/dapr/runner";
 import manualApprovalWorkflow from "./manual_approval";
-import { createDaprWorkflowFromGraph } from "../src/workflow/dapr/runner";
 
-const workflowWorker = new WorkflowRuntime();
+const daprHost = process.env.DAPR_HOST ?? "localhost"; // Dapr Sidecar Host
+const daprPort = process.env.DAPR_HTTP_PORT || "3500"; // Dapr Sidecar Port of this Example Server
 
-async function start() {
-  // Update the gRPC client and worker to use a local address and port
-  const workflowClient = new DaprWorkflowClient();
+const app = express();
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
-  const daprHost = process.env.DAPR_HOST ?? "127.0.0.1";
-  const daprPort = process.env.DAPR_GRPC_PORT ?? "50001";
-
-  const daprClient = new DaprClient({
+const daprServer = new DaprServer({
+  serverHost: "127.0.0.1", // App Host
+  serverPort: process.env.APP_PORT || "3000", // App Port
+  serverHttp: app,
+  communicationProtocol: CommunicationProtocolEnum.HTTP, // Add this line
+  clientOptions: {
     daprHost,
     daprPort,
-    communicationProtocol: CommunicationProtocolEnum.GRPC,
-  });
+  },
+});
 
-  const manuelApproval = createDaprWorkflowFromGraph(manualApprovalWorkflow);
-  workflowWorker.registerWorkflowWithName(manuelApproval.name, manuelApproval.daprWorkflow);
-  for (const kv of manuelApproval.activities.entries()) {
-    const activityName = kv[0];
-    const activity = kv[1];
-    workflowWorker.registerActivityWithName(activityName, activity);
-  }
+const daprClient = new DaprClient();
+const workflowClient = new DaprWorkflowClient();
+const workflowWorker = new WorkflowRuntime();
+const workflowByName = new Map<string, ReturnType<typeof createDaprWorkflowFromGraph>>();
 
-  // Wrap the worker startup in a try-catch block to handle any errors during startup
+app.post("/start-workflow", async (req, res) => {
+  // Schedule a new orchestration
   try {
+    const workflowName = req.body.workflowName;
+    const input = req.body.input;
+    const workflow = workflowByName.get(workflowName);
+    if (!workflow) throw new Error(`Workflow ${workflowName} not found`);
+    const id = await workflowClient.scheduleNewWorkflow(workflowName, { input });
+    console.log(`Orchestration scheduled with ID: ${id}`);
+
+    // Wait for orchestration completion
+    const state = await workflowClient.waitForWorkflowCompletion(id, undefined, 30);
+
+    const orchestrationResult = `Orchestration completed! Result: ${state?.serializedOutput}`;
+    console.log(orchestrationResult);
+    res.send(orchestrationResult);
+  } catch (error) {
+    console.error("Error scheduling or waiting for orchestration:", error);
+    throw error;
+  }
+});
+
+async function start() {
+  // TODO register işlemi rest api ile yada db den okuyup yapılabilir
+  try {
+    registerWorkflowToDapr(workflowWorker, workflowByName, manualApprovalWorkflow);
     await workflowWorker.start();
     console.log("Workflow runtime started successfully");
   } catch (error) {
     console.error("Error starting workflow runtime:", error);
   }
 
-  // Schedule a new orchestration
-  try {
-    const id = await workflowClient.scheduleNewWorkflow(manuelApproval.daprWorkflow, {});
-    console.log(`Orchestration scheduled with ID: ${id}`);
-
-    // Wait for orchestration completion
-    const state = await workflowClient.waitForWorkflowCompletion(id, undefined, 30);
-
-    console.log(`Orchestration completed! Result: ${state?.serializedOutput}`);
-  } catch (error) {
-    console.error("Error scheduling or waiting for orchestration:", error);
-    throw error;
-  }
-
-  await workflowClient.stop();
+  // Initialize subscriptions before the server starts, the Dapr sidecar uses it.
+  // This will also initialize the app server itself (removing the need for `app.listen` to be called).
+  await daprServer.start();
 }
 
-process.on("SIGTERM", () => {
-  workflowWorker.stop();
-});
-
 start().catch((e) => {
+  workflowWorker.stop();
   console.error(e);
   process.exit(1);
 });

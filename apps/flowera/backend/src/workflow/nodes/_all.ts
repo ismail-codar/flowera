@@ -35,7 +35,7 @@ export type IWorkflowNode<N extends string = string> =
   | IWorkflowResponseNodes<N>;
 // #endregion
 
-// interface IWorkflowNode1<N> {
+// interface IWorkflowNode<N> {
 //     name: N
 // }
 

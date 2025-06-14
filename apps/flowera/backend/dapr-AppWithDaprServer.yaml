@@ -1,0 +1,10 @@
+version: 1
+common:
+  resourcesPath: dapr/components
+apps:
+  - appID: manual_approval
+    appDirPath: ./
+    appPort: 3000
+    daprHTTPPort: 3500
+    daprGRPCPort: 50001
+    command: ["npm", "run", "start:manual_approval"]
