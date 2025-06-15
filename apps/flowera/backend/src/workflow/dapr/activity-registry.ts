@@ -9,6 +9,14 @@ activityRegistry.set("trigger_manuel", async function trigger_manuel(_: Workflow
 
 // action_mail action type
 activityRegistry.set("action_mail", async function action_mail(_: WorkflowActivityContext, request: any) {
+  const mail = {
+    Sender: "tys.info@inferatech.com.tr",
+    Address: "smtp-mail.outlook.com:587",
+    User: "tys.info@inferatech.com.tr",
+    Password: "123.123Ti.!",
+    Secure: "1",
+    Base64: "",
+  };
   return { action_mail: new Date() };
 });
 

@@ -38,7 +38,7 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
             - node tipi wait ise beklemeye geçilebilir,
             - node tipi return ise sonuç return edilebilir.
         */
-        const sourceActivityResult = yield daprContext.callActivity(activity, currentStackItem.payload);
+        const sourceActivityResult = yield daprContext.callActivity(activity, currentStackItem);
 
         graphNodeResult.set(currentStackItem.graphNode.name, sourceActivityResult);
 
@@ -47,7 +47,6 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
           const nextNode = graph.nodes.find((node) => node.name === edge.target);
           if (nextNode) {
             stack.push({
-              ...currentStackItem,
               graphNode: nextNode,
               payload: sourceActivityResult,
             });
@@ -91,12 +90,3 @@ export const registerWorkflowToDapr = (
     workflowWorker.registerActivityWithName(activityName, activity);
   }
 };
-
-/** MAIL
-    "Sender": "tys.info@inferatech.com.tr",
-    "Address": "smtp-mail.outlook.com:587",
-    "User": "tys.info@inferatech.com.tr",
-    "Password": "123.123Ti.!",
-    "Secure": "1",
-    "Base64": ""
- */
