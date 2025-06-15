@@ -14,13 +14,14 @@ const manualApprovalWorkflow: IWorkflowGraph<
   name: "Manuel Onay Süreci",
   nodes: [
     {
-      key: "manuelTrigger",
+      activityKey: "trigger_manuel",
       name: "Manuel Tetikleme",
       baseType: "trigger",
       triggerType: "manuel",
       properties: {},
     },
     {
+      activityKey: "action_mail",
       name: "Onay E-postası Gönder",
       baseType: "action",
       actionType: "mail",
@@ -32,6 +33,7 @@ const manualApprovalWorkflow: IWorkflowGraph<
       },
     },
     {
+      activityKey: "response_webhookResponse",
       name: "Webhook - Onay Yanıtı",
       baseType: "response",
       responseType: "webhookResponse",
@@ -42,6 +44,7 @@ const manualApprovalWorkflow: IWorkflowGraph<
       },
     },
     {
+      activityKey: "condition_if",
       name: "Karar Kontrolü",
       baseType: "condition",
       conditionType: "if",
@@ -58,6 +61,7 @@ const manualApprovalWorkflow: IWorkflowGraph<
       },
     },
     {
+      activityKey: "action_mail",
       name: "Onay Sonucu Bildir",
       baseType: "action",
       actionType: "mail",
@@ -69,6 +73,7 @@ const manualApprovalWorkflow: IWorkflowGraph<
       },
     },
     {
+      activityKey: "response_httpResponse",
       name: "Onay Teşekkür Sayfası",
       baseType: "response",
       responseType: "httpResponse",
@@ -79,6 +84,7 @@ const manualApprovalWorkflow: IWorkflowGraph<
       },
     },
     {
+      activityKey: "action_mail",
       name: "Red Sonucu Bildir",
       baseType: "action",
       actionType: "mail",
@@ -90,6 +96,7 @@ const manualApprovalWorkflow: IWorkflowGraph<
       },
     },
     {
+      activityKey: "response_httpResponse",
       name: "Red Teşekkür Sayfası",
       baseType: "response",
       responseType: "httpResponse",

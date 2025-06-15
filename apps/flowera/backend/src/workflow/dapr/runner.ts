@@ -27,7 +27,7 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
         // Eğer zaten bu node işlendi ise atla
         if (graphNodeResult.has(currentStackItem.graphNode.name)) continue;
 
-        const activity = activityByName.get(currentStackItem.graphNode.name);
+        const activity = activityByName.get(currentStackItem.graphNode.activityKey);
         if (!activity) continue;
 
         // const sourceActivityResult = runActivity(ctx.dapr, activity, ctx.graphNode, ctx.payload);
@@ -61,14 +61,8 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
   };
 
   for (const node of graph.nodes) {
-    let nodeKey = "";
-    if (node.baseType === "trigger") {
-      if (node.triggerType === "manuel") {
-        nodeKey = "manuelTrigger";
-      }
-    }
-    const activity = activityRegistry.get(nodeKey);
-    activityByName.set(node.key || node.name, activity);
+    const activity = activityRegistry.get(node.activityKey);
+    activityByName.set(node.activityKey || node.name, activity);
   }
 
   return {
