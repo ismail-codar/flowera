@@ -1,5 +1,6 @@
 // #region Core Base Types
 interface IWorkflowBaseNode<N extends string, T extends "trigger" | "action" | "condition" | "response"> {
+  key?: string;
   name: N;
   baseType: T;
   properties: {};

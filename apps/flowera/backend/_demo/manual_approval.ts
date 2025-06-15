@@ -14,6 +14,7 @@ const manualApprovalWorkflow: IWorkflowGraph<
   name: "Manuel Onay Süreci",
   nodes: [
     {
+      key: "manuelTrigger",
       name: "Manuel Tetikleme",
       baseType: "trigger",
       triggerType: "manuel",
