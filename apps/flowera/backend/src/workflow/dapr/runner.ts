@@ -38,7 +38,7 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
             - node tipi wait ise beklemeye geçilebilir,
             - node tipi return ise sonuç return edilebilir.
         */
-        const sourceActivityResult = yield daprContext.callActivity(activity, {});
+        const sourceActivityResult = yield daprContext.callActivity(activity, currentStackItem.payload);
 
         graphNodeResult.set(currentStackItem.graphNode.name, sourceActivityResult);
 
