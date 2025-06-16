@@ -4,7 +4,6 @@ import type { IDaprWorkflowRunnerContext } from "./types";
 import type { IWorkflowMailNode } from "../nodes/action";
 import type { IWorkflowIfNode } from "../nodes/flow";
 
-// TODO node.baseType dan başlayarak node tipine göre işlem yaptırılacak. mail gönder, http request, http response, http webhook, wait?, if?, switch?
 export const activityRegistry = new Map<string, any>();
 
 activityRegistry.set("trigger_manuel", async function trigger_manuel(_: WorkflowActivityContext, request: any) {
@@ -25,7 +24,6 @@ activityRegistry.set(
       password: "123.123Ti.!",
     };
 
-    // Create a transporter
     const transporter = nodemailer.createTransport({
       host: mailConfig.address,
       port: 587,
@@ -36,16 +34,13 @@ activityRegistry.set(
       },
     });
 
-    // Define email options
     const mailOptions = {
       from: mailConfig.sender,
       to: graphNode.properties.to,
       subject: graphNode.properties.subject,
-      //   text: graphNode.properties.body,
       html: graphNode.properties.body,
     };
 
-    // Send the email
     try {
       const info = await transporter.sendMail(mailOptions);
       console.log("Email sent: %s", info.messageId);
@@ -58,14 +53,6 @@ activityRegistry.set(
   },
 );
 
-// response_webhookResponse response type
-activityRegistry.set(
-  "response_webhookResponse",
-  async function response_webhookResponse(_: WorkflowActivityContext, request: any) {
-    return { response_webhookResponse: new Date() };
-  },
-);
-
 // condition_if condition type
 activityRegistry.set(
   "condition_if",
@@ -73,15 +60,25 @@ activityRegistry.set(
     _: WorkflowActivityContext,
     { graphNode, payload }: IDaprWorkflowRunnerContext<IWorkflowIfNode>,
   ) {
-    // TODO trueBranch, falseBranch
-    return { condition_if: new Date(), result: payload === "approved" };
+    return { condition_if: new Date(), result: payload === "true" };
+  },
+);
+
+// response_webhookResponse response type SİLME ! yoksa doğrudan worfklow result geliyor
+activityRegistry.set(
+  "response_webhookResponse",
+  async function response_webhookResponse(_: WorkflowActivityContext, request: any) {
+    return { response_webhookResponse: new Date() };
   },
 );
 
 // response_httpResponse response type
 activityRegistry.set(
   "response_httpResponse",
-  async function response_httpResponse(_: WorkflowActivityContext, request: any) {
-    return { response_httpResponse: new Date() };
+  async function response_httpResponse(
+    _: WorkflowActivityContext,
+    { graphNode, payload }: IDaprWorkflowRunnerContext<IWorkflowIfNode>,
+  ) {
+    return { response_httpResponse: new Date(), payload };
   },
 );

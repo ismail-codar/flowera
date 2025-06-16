@@ -63,7 +63,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/webhook?workflowInstanceId=4e2fa95a-0ea7-4e34-962e-7f16b91f68b4&workflowName=Manuel Onay Süreci&nodeName=Webhook - Onay Yanıtı&payload=approved",
+					"raw": "localhost:3000/webhook?workflowInstanceId=12359bc6-b34b-4646-b2e0-9ee27bafb846&workflowName=Manuel Onay Süreci&nodeName=Webhook - Onay Yanıtı&payload=true",
 					"host": [
 						"localhost"
 					],
@@ -74,7 +74,7 @@
 					"query": [
 						{
 							"key": "workflowInstanceId",
-							"value": "4e2fa95a-0ea7-4e34-962e-7f16b91f68b4"
+							"value": "12359bc6-b34b-4646-b2e0-9ee27bafb846"
 						},
 						{
 							"key": "workflowName",
@@ -86,7 +86,7 @@
 						},
 						{
 							"key": "payload",
-							"value": "{action:approve}"
+							"value": "true"
 						}
 					]
 				}

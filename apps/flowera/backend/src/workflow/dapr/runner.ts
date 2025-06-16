@@ -5,7 +5,7 @@ import { findRootGraphNodes } from "../utils/graph-util";
 import type { IDaprWorkflowRunnerContext as IDaprWorkflowRunnerInput } from "./types";
 import { activityRegistry } from "./activity-registry";
 import type { IRouter } from "express";
-import { IWorkflowIfNode } from "../nodes/flow";
+import type { IWorkflowIfNode } from "../nodes/flow";
 
 export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: IRouter) => {
   const daprActivities = new Map<string, TWorkflowActivity<any, any>>();
@@ -53,7 +53,6 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
             // TODO son aktivite olup worflow result döndürtsün şeklinde de kullanılabilir
             sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem });
           } else {
-            debugger;
             throw new Error(`Unsupported response type: ${currentStackItem.graphNode.responseType}`);
           }
         } else if (currentStackItem.graphNode.baseType === "condition") {
@@ -71,7 +70,6 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
               });
             }
           } else {
-            debugger;
             throw new Error(`Unsupported condition type: ${currentStackItem.graphNode.conditionType}`);
           }
           // condition tiplerinde stack e eklenme yukardaki gibi özel yapılır
