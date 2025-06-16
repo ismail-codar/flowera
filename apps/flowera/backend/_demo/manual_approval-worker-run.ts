@@ -32,7 +32,7 @@ app.get("/webhook", async (req, res) => {
   const { workflowName, workflowInstanceId, nodeName, payload } = req.query;
   const workflow = workflowByName.get(workflowName as string);
   if (!workflow) throw new Error(`Workflow ${workflowName} not found`);
-  console.log("/webhook", workflowName, workflowInstanceId, nodeName, payload);
+  console.log("/webhook ----> ", workflowName, workflowInstanceId, nodeName, payload);
   workflowClient.raiseEvent(workflowInstanceId as string, `webhook_${nodeName}`, payload);
 });
 

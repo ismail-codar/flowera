@@ -1,4 +1,4 @@
-import { IWorkflowActionNode, IWorkflowConditionNode } from "./base";
+import type { IWorkflowActionNode, IWorkflowConditionNode } from "./base";
 
 // #region Flow Control Nodes
 export interface IWorkflowIfNode<N extends string = string> extends IWorkflowConditionNode<N, "if"> {

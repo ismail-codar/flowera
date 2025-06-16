@@ -63,7 +63,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/webhook?workflowInstanceId=4e2fa95a-0ea7-4e34-962e-7f16b91f68b4&workflowName=Manuel Onay Süreci&nodeName=Webhook - Onay Yanıtı&payload={action:approve}",
+					"raw": "localhost:3000/webhook?workflowInstanceId=4e2fa95a-0ea7-4e34-962e-7f16b91f68b4&workflowName=Manuel Onay Süreci&nodeName=Webhook - Onay Yanıtı&payload=approved",
 					"host": [
 						"localhost"
 					],

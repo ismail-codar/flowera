@@ -74,7 +74,7 @@ activityRegistry.set(
     { graphNode, payload }: IDaprWorkflowRunnerContext<IWorkflowIfNode>,
   ) {
     // TODO trueBranch, falseBranch
-    return { condition_if: new Date() };
+    return { condition_if: new Date(), result: payload === "approved" };
   },
 );
 

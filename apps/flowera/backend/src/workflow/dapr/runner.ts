@@ -5,6 +5,7 @@ import { findRootGraphNodes } from "../utils/graph-util";
 import type { IDaprWorkflowRunnerContext as IDaprWorkflowRunnerInput } from "./types";
 import { activityRegistry } from "./activity-registry";
 import type { IRouter } from "express";
+import { IWorkflowIfNode } from "../nodes/flow";
 
 export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: IRouter) => {
   const daprActivities = new Map<string, TWorkflowActivity<any, any>>();
@@ -34,7 +35,7 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
         const activity = daprActivities.get(currentStackItem.graphNode.activityKey);
         if (!activity) continue;
 
-        let sourceActivityResult = null;
+        let sourceActivityResult: any = null;
         // const sourceActivityResult = runActivity(ctx.dapr, activity, ctx.graphNode, ctx.payload);
         // TODO callActivity yerine waitForExternalEvent whenAll vs olabilecek
         /* TODO activity işlemleri:
@@ -43,13 +44,38 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
             - node tipi wait ise beklemeye geçilebilir,
             - node tipi return ise sonuç return edilebilir.
         */
-        // webhook lar initializeWebHooks içinde işleniyor
-        if (
-          currentStackItem.graphNode.baseType === "response" &&
-          currentStackItem.graphNode.responseType === "webhookResponse"
-        ) {
-          sourceActivityResult = yield daprContext.waitForExternalEvent(`webhook_${currentStackItem.graphNode.name}`);
-          console.log("webhook", currentStackItem.graphNode.name, sourceActivityResult);
+        if (currentStackItem.graphNode.baseType === "response") {
+          if (currentStackItem.graphNode.responseType === "webhookResponse") {
+            // webhook cevap alınması
+            sourceActivityResult = yield daprContext.waitForExternalEvent(`webhook_${currentStackItem.graphNode.name}`);
+            console.log("webhook", currentStackItem.graphNode.name, sourceActivityResult);
+          } else if (currentStackItem.graphNode.responseType === "httpResponse") {
+            // TODO son aktivite olup worflow result döndürtsün şeklinde de kullanılabilir
+            sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem });
+          } else {
+            debugger;
+            throw new Error(`Unsupported response type: ${currentStackItem.graphNode.responseType}`);
+          }
+        } else if (currentStackItem.graphNode.baseType === "condition") {
+          if (currentStackItem.graphNode.conditionType === "if") {
+            // if trueBranch falseBranch yönlendirmesi
+            sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem });
+            if (sourceActivityResult && "result" in sourceActivityResult) {
+              const ifNode = currentStackItem.graphNode as IWorkflowIfNode;
+              const nextNode = sourceActivityResult.result
+                ? graph.nodes.find((node) => node.name === ifNode.properties.trueBranch)
+                : graph.nodes.find((node) => node.name === ifNode.properties.falseBranch);
+              stack.push({
+                graphNode: nextNode as IWorkflowNode<string>,
+                payload: sourceActivityResult,
+              });
+            }
+          } else {
+            debugger;
+            throw new Error(`Unsupported condition type: ${currentStackItem.graphNode.conditionType}`);
+          }
+          // condition tiplerinde stack e eklenme yukardaki gibi özel yapılır
+          continue;
         } else {
           sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem });
           graphNodeResult.set(currentStackItem.graphNode.name, sourceActivityResult);
