@@ -1,7 +1,7 @@
 import { IWorkflowActionNode, IWorkflowConditionNode } from "./base";
 
 // #region Flow Control Nodes
-export interface IWorkflowIfNode<N extends string> extends IWorkflowConditionNode<N, "if"> {
+export interface IWorkflowIfNode<N extends string = string> extends IWorkflowConditionNode<N, "if"> {
   conditionType: "if";
   properties: {
     conditions: {

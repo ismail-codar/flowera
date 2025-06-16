@@ -1,7 +1,8 @@
 import type { WorkflowActivityContext } from "@dapr/dapr";
 import nodemailer from "nodemailer";
-import { IDaprWorkflowRunnerContext } from "./types";
-import { IWorkflowMailNode } from "../nodes/action";
+import type { IDaprWorkflowRunnerContext } from "./types";
+import type { IWorkflowMailNode } from "../nodes/action";
+import type { IWorkflowIfNode } from "../nodes/flow";
 
 // TODO node.baseType dan başlayarak node tipine göre işlem yaptırılacak. mail gönder, http request, http response, http webhook, wait?, if?, switch?
 export const activityRegistry = new Map<string, any>();
@@ -49,7 +50,6 @@ activityRegistry.set(
       const info = await transporter.sendMail(mailOptions);
       console.log("Email sent: %s", info.messageId);
     } catch (error) {
-      debugger;
       console.error("Error sending email:", error);
       return { action_mail: error };
     }
@@ -67,9 +67,16 @@ activityRegistry.set(
 );
 
 // condition_if condition type
-activityRegistry.set("condition_if", async function condition_if(_: WorkflowActivityContext, request: any) {
-  return { condition_if: new Date() };
-});
+activityRegistry.set(
+  "condition_if",
+  async function condition_if(
+    _: WorkflowActivityContext,
+    { graphNode, payload }: IDaprWorkflowRunnerContext<IWorkflowIfNode>,
+  ) {
+    // TODO trueBranch, falseBranch
+    return { condition_if: new Date() };
+  },
+);
 
 // response_httpResponse response type
 activityRegistry.set(

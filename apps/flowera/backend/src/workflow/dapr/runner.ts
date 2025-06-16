@@ -49,6 +49,7 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
           currentStackItem.graphNode.responseType === "webhookResponse"
         ) {
           sourceActivityResult = yield daprContext.waitForExternalEvent(`webhook_${currentStackItem.graphNode.name}`);
+          console.log("webhook", currentStackItem.graphNode.name, sourceActivityResult);
         } else {
           sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem });
           graphNodeResult.set(currentStackItem.graphNode.name, sourceActivityResult);
