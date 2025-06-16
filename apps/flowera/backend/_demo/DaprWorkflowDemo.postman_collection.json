@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "7c28f8b9-c0a5-4148-99e4-3288aa0b6b4f",
+		"name": "DaprWorkflowDemo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "171021"
+	},
+	"item": [
+		{
+			"name": "start-workflow",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "dapr-app-id",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"workflowName\": \"Manuel Onay Süreci\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/start-workflow",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"start-workflow"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "workflow-webhook",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "dapr-app-id",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"workflowName\": \"Manuel Onay Süreci\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/webhook?workflowInstanceId=4e2fa95a-0ea7-4e34-962e-7f16b91f68b4&workflowName=Manuel Onay Süreci&nodeName=Webhook - Onay Yanıtı&payload={action:approve}",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"webhook"
+					],
+					"query": [
+						{
+							"key": "workflowInstanceId",
+							"value": "4e2fa95a-0ea7-4e34-962e-7f16b91f68b4"
+						},
+						{
+							"key": "workflowName",
+							"value": "Manuel Onay Süreci"
+						},
+						{
+							"key": "nodeName",
+							"value": "Webhook - Onay Yanıtı"
+						},
+						{
+							"key": "payload",
+							"value": "{action:approve}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

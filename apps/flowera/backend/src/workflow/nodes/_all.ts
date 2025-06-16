@@ -40,6 +40,7 @@ export type IWorkflowNode<N extends string = string> =
 // }
 
 export interface IWorkflowGraph<N extends string = string> {
+  workflowInstanceId?: string;
   name: string;
   nodes: IWorkflowNode<N>[];
   edges: {

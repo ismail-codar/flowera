@@ -24,10 +24,17 @@ const daprServer = new DaprServer({
   },
 });
 
-const daprClient = new DaprClient();
 const workflowClient = new DaprWorkflowClient();
 const workflowWorker = new WorkflowRuntime();
 const workflowByName = new Map<string, ReturnType<typeof createDaprWorkflowFromGraph>>();
+
+app.get("/webhook", async (req, res) => {
+  const { workflowName, workflowInstanceId, nodeName, payload } = req.query;
+  const workflow = workflowByName.get(workflowName as string);
+  if (!workflow) throw new Error(`Workflow ${workflowName} not found`);
+  console.log("/webhook", workflowName, workflowInstanceId, nodeName, payload);
+  workflowClient.raiseEvent(workflowInstanceId as string, `webhook_${nodeName}`, payload);
+});
 
 app.post("/start-workflow", async (req, res) => {
   // Schedule a new orchestration
@@ -36,11 +43,12 @@ app.post("/start-workflow", async (req, res) => {
     const input = req.body.input;
     const workflow = workflowByName.get(workflowName);
     if (!workflow) throw new Error(`Workflow ${workflowName} not found`);
-    const id = await workflowClient.scheduleNewWorkflow(workflowName, { input });
-    console.log(`Orchestration scheduled with ID: ${id}`);
+    const workflowInstanceId = await workflowClient.scheduleNewWorkflow(workflowName, { input });
+    workflow.graph.workflowInstanceId = workflowInstanceId;
+    console.log(`Orchestration scheduled with ID: ${workflowInstanceId}`);
 
     // Wait for orchestration completion
-    const state = await workflowClient.waitForWorkflowCompletion(id, undefined, 30);
+    const state = await workflowClient.waitForWorkflowCompletion(workflowInstanceId, undefined, 99999);
 
     const orchestrationResult = `Orchestration completed! Result: ${state?.serializedOutput}`;
     console.log(orchestrationResult);

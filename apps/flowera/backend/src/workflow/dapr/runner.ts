@@ -7,14 +7,13 @@ import { activityRegistry } from "./activity-registry";
 import type { IRouter } from "express";
 
 export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: IRouter) => {
-  const activityByName = new Map<string, TWorkflowActivity<any, any>>();
+  const daprActivities = new Map<string, TWorkflowActivity<any, any>>();
 
   const daprWorkflow: TWorkflow = async function* (daprContext: WorkflowContext, payload: any): any {
+    const workflowInstanceId = daprContext.getWorkflowInstanceId();
+    console.log({ workflowInstanceId });
     const workflowResult = new Map<string, any>();
     const graphRoots = findRootGraphNodes(graph);
-
-    // webhook init
-    initializeWebHooks(graph, graphRoots, httpServer, payload);
 
     for (const rootNode of graphRoots) {
       const graphNodeResult = new Map<string, any>();
@@ -32,17 +31,10 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
         // Eğer zaten bu node işlendi ise atla
         if (graphNodeResult.has(currentStackItem.graphNode.name)) continue;
 
-        const activity = activityByName.get(currentStackItem.graphNode.activityKey);
+        const activity = daprActivities.get(currentStackItem.graphNode.activityKey);
         if (!activity) continue;
 
-        // webhook lar initializeWebHooks içinde işleniyor
-        if (
-          currentStackItem.graphNode.baseType === "response" &&
-          currentStackItem.graphNode.responseType === "webhookResponse"
-        ) {
-          continue;
-        }
-
+        let sourceActivityResult = null;
         // const sourceActivityResult = runActivity(ctx.dapr, activity, ctx.graphNode, ctx.payload);
         // TODO callActivity yerine waitForExternalEvent whenAll vs olabilecek
         /* TODO activity işlemleri:
@@ -51,9 +43,16 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
             - node tipi wait ise beklemeye geçilebilir,
             - node tipi return ise sonuç return edilebilir.
         */
-        const sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem });
-
-        graphNodeResult.set(currentStackItem.graphNode.name, sourceActivityResult);
+        // webhook lar initializeWebHooks içinde işleniyor
+        if (
+          currentStackItem.graphNode.baseType === "response" &&
+          currentStackItem.graphNode.responseType === "webhookResponse"
+        ) {
+          sourceActivityResult = yield daprContext.waitForExternalEvent(`webhook_${currentStackItem.graphNode.name}`);
+        } else {
+          sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem });
+          graphNodeResult.set(currentStackItem.graphNode.name, sourceActivityResult);
+        }
 
         const outputEdges = graph.edges.filter((edge) => edge.source === currentStackItem.graphNode.name);
         for (const edge of outputEdges) {
@@ -74,13 +73,13 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: I
 
   for (const node of graph.nodes) {
     const activity = activityRegistry.get(node.activityKey);
-    activityByName.set(node.activityKey || node.name, activity);
+    daprActivities.set(node.activityKey || node.name, activity);
   }
 
   return {
-    name: graph.name,
+    graph,
     daprWorkflow,
-    activities: activityByName,
+    daprActivities,
   };
 };
 
@@ -91,10 +90,10 @@ export const registerWorkflowToDapr = (
   httpServer: IRouter,
 ) => {
   const workflow = createDaprWorkflowFromGraph(workflowGraph, httpServer);
-  workflowByName.set(workflow.name, workflow);
+  workflowByName.set(workflowGraph.name, workflow);
   // registerWorkflowWithName ile kaydedilen workflow workflowClient.scheduleNewWorkflow(workflowName, { input }); şeklinde çağrılıyor
-  workflowWorker.registerWorkflowWithName(workflow.name, workflow.daprWorkflow);
-  for (const kv of workflow.activities.entries()) {
+  workflowWorker.registerWorkflowWithName(workflowGraph.name, workflow.daprWorkflow);
+  for (const kv of workflow.daprActivities.entries()) {
     const activityKey = kv[0];
     const activity = kv[1];
     if (!activity) {
@@ -102,33 +101,5 @@ export const registerWorkflowToDapr = (
       continue;
     }
     workflowWorker.registerActivityWithName(activityKey, activity);
-  }
-};
-
-const initializeWebHooks = (
-  graph: IWorkflowGraph,
-  graphRoots: IWorkflowNode<any>[],
-  httpServer: IRouter,
-  payload: any,
-) => {
-  for (const rootNode of graphRoots) {
-    const stack: IWorkflowNode<any>[] = [rootNode];
-
-    while (stack.length > 0) {
-      const graphNode = stack.pop();
-      if (!graphNode) continue;
-      if (graphNode.baseType === "response" && graphNode.responseType === "webhookResponse") {
-        httpServer.get("", () => {
-          //
-        });
-      }
-      const outputEdges = graph.edges.filter((edge) => edge.source === graphNode.name);
-      for (const edge of outputEdges) {
-        const nextNode = graph.nodes.find((node) => node.name === edge.target);
-        if (nextNode) {
-          stack.push(nextNode);
-        }
-      }
-    }
   }
 };
