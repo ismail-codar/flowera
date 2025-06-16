@@ -29,7 +29,10 @@ const workflowWorker = new WorkflowRuntime();
 const workflowByName = new Map<string, ReturnType<typeof createDaprWorkflowFromGraph>>();
 
 app.get("/webhook", async (req, res) => {
-  const { workflowName, workflowInstanceId, nodeName, payload } = req.query;
+  const { workflowInstanceId, nodeName, payload } = req.query;
+  const workflowName = [...workflowByName].find(
+    ([key, value]) => value.graph.workflowInstanceId === workflowInstanceId,
+  )?.[1].graph.name;
   const workflow = workflowByName.get(workflowName as string);
   if (!workflow) throw new Error(`Workflow ${workflowName} not found`);
   console.log("/webhook ----> ", workflowName, workflowInstanceId, nodeName, payload);

@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import type { IDaprWorkflowRunnerContext } from "./types";
 import type { IWorkflowMailNode } from "../nodes/action";
 import type { IWorkflowIfNode } from "../nodes/flow";
+import { compileTemplate } from "../utils/graph-util";
 
 export const activityRegistry = new Map<string, any>();
 
@@ -34,11 +35,16 @@ activityRegistry.set(
       },
     });
 
+    const html = compileTemplate(graphNode.properties.body, {
+      workflowInstanceId: _.getWorkflowInstanceId(),
+      nodeName: encodeURIComponent(graphNode.name),
+    });
+
     const mailOptions = {
       from: mailConfig.sender,
       to: graphNode.properties.to,
       subject: graphNode.properties.subject,
-      html: graphNode.properties.body,
+      html,
     };
 
     try {

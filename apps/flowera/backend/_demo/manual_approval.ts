@@ -28,7 +28,37 @@ const manualApprovalWorkflow: IWorkflowGraph<
       properties: {
         to: ["icodar@gmail.com"],
         subject: "Onay İsteği",
-        body: "Lütfen onayınızı yapın.",
+        body: `<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Onayınız Gerekli</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #2c3e50;">Onay Gerekli</h2>
+            <p>Merhaba,</p>
+            <p>Aşağıdaki işlem için onayınız gerekiyor. Lütfen tercih ettiğiniz seçeneğe tıklayın:</p>
+            <div style="text-align: center; margin: 30px 0;">
+                <a
+                    href="http://localhost:3000/webhook?workflowInstanceId=_{workflowInstanceId}&nodeName=_{nodeName}&payload=true"
+                    style="background-color: #27ae60; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 0 10px; display: inline-block;"
+                >
+                    ✅ Onayla
+                </a>
+                <a
+                    href="http://localhost:3000/webhook?workflowInstanceId=_{workflowInstanceId}&nodeName=_{nodeName}&payload=false"
+                    style="background-color: #e74c3c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 0 10px; display: inline-block;"
+                >
+                    ❌ Reddet
+                </a>
+            </div>
+            <p>Bu e-posta otomatik olarak gönderilmiştir.</p>
+            <p>İyi çalışmalar!</p>
+        </div>
+    </body>
+</html>
+`,
         bodyType: "text",
       },
     },
@@ -68,7 +98,23 @@ const manualApprovalWorkflow: IWorkflowGraph<
       properties: {
         to: ["icodar@gmail.com"],
         subject: "Onay Sonucu",
-        body: "Onay başarıyla tamamlandı.",
+        body: `<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Süreç Onaylandı</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #27ae60;">✅ Süreç Onaylandı</h2>
+            <p>Merhaba,</p>
+            <p>İlgili süreç başarıyla <strong>onaylandı</strong>.</p>
+            <p><strong>Durum:</strong> Onaylandı</p>
+            <p>Bu e-posta otomatik olarak gönderilmiştir.</p>
+        </div>
+    </body>
+</html>
+`,
         bodyType: "text",
       },
     },
@@ -91,7 +137,23 @@ const manualApprovalWorkflow: IWorkflowGraph<
       properties: {
         to: ["icodar@gmail.com"],
         subject: "Red Sonucu",
-        body: "Onay reddedildi.",
+        body: `<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Süreç Reddedildi</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #e74c3c;">❌ Süreç Reddedildi</h2>
+            <p>Merhaba,</p>
+            <p>İlgili süreç <strong>reddedildi</strong>.</p>
+            <p><strong>Durum:</strong> Reddedildi</p>
+            <p>Bu e-posta otomatik olarak gönderilmiştir.</p>
+        </div>
+    </body>
+</html>
+`,
         bodyType: "text",
       },
     },
