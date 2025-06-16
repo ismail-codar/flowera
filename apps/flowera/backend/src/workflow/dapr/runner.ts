@@ -82,12 +82,12 @@ export const registerWorkflowToDapr = (
   // registerWorkflowWithName ile kaydedilen workflow workflowClient.scheduleNewWorkflow(workflowName, { input }); şeklinde çağrılıyor
   workflowWorker.registerWorkflowWithName(workflow.name, workflow.daprWorkflow);
   for (const kv of workflow.activities.entries()) {
-    const activityName = kv[0];
+    const activityKey = kv[0];
     const activity = kv[1];
     if (!activity) {
-      console.warn(`Activity ${activityName} not found`);
+      console.warn(`Activity ${activityKey} not found`);
       continue;
     }
-    workflowWorker.registerActivityWithName(activityName, activity);
+    workflowWorker.registerActivityWithName(activityKey, activity);
   }
 };
