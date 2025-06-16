@@ -2,10 +2,10 @@ import type { TWorkflow, WorkflowActivityContext, WorkflowContext, WorkflowRunti
 import type { IWorkflowGraph, IWorkflowNode } from "../nodes/_all";
 import type { TWorkflowActivity } from "@dapr/dapr/types/workflow/Activity.type";
 import { findRootGraphNodes } from "../utils/graph-util";
-import type { IDaprWorkflowRunnerContext } from "./types";
+import type { IDaprWorkflowRunnerContext as IDaprWorkflowRunnerInput } from "./types";
 import { activityRegistry } from "./activity-registry";
 
-export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
+export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph, httpServer: any) => {
   const activityByName = new Map<string, TWorkflowActivity<any, any>>();
 
   const daprWorkflow: TWorkflow = async function* (daprContext: WorkflowContext, payload: any): any {
@@ -13,7 +13,7 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
     const graphRoots = findRootGraphNodes(graph);
     for (const rootNode of graphRoots) {
       const graphNodeResult = new Map<string, any>();
-      const stack: IDaprWorkflowRunnerContext[] = [
+      const stack: IDaprWorkflowRunnerInput[] = [
         {
           graphNode: rootNode,
           payload,
@@ -38,7 +38,7 @@ export const createDaprWorkflowFromGraph = (graph: IWorkflowGraph) => {
             - node tipi wait ise beklemeye geçilebilir,
             - node tipi return ise sonuç return edilebilir.
         */
-        const sourceActivityResult = yield daprContext.callActivity(activity, currentStackItem);
+        const sourceActivityResult = yield daprContext.callActivity(activity, { ...currentStackItem, httpServer });
 
         graphNodeResult.set(currentStackItem.graphNode.name, sourceActivityResult);
 
@@ -75,8 +75,9 @@ export const registerWorkflowToDapr = (
   workflowWorker: WorkflowRuntime,
   workflowByName: Map<string, ReturnType<typeof createDaprWorkflowFromGraph>>,
   workflowGraph: IWorkflowGraph,
+  httpServer: any,
 ) => {
-  const workflow = createDaprWorkflowFromGraph(workflowGraph);
+  const workflow = createDaprWorkflowFromGraph(workflowGraph, httpServer);
   workflowByName.set(workflow.name, workflow);
   // registerWorkflowWithName ile kaydedilen workflow workflowClient.scheduleNewWorkflow(workflowName, { input }); şeklinde çağrılıyor
   workflowWorker.registerWorkflowWithName(workflow.name, workflow.daprWorkflow);

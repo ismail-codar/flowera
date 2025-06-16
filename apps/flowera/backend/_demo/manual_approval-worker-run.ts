@@ -54,7 +54,7 @@ app.post("/start-workflow", async (req, res) => {
 async function start() {
   // TODO register işlemi rest api ile yada db den okuyup yapılabilir
   try {
-    registerWorkflowToDapr(workflowWorker, workflowByName, manualApprovalWorkflow);
+    registerWorkflowToDapr(workflowWorker, workflowByName, manualApprovalWorkflow, app);
     await workflowWorker.start();
     console.log("Workflow runtime started successfully");
   } catch (error) {

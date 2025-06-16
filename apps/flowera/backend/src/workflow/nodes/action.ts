@@ -17,7 +17,7 @@ export interface IWorkflowHttpRequestNode<N extends string> extends IWorkflowAct
   };
 }
 
-export interface IWorkflowMailNode<N extends string> extends IWorkflowActionNode<N, "mail"> {
+export interface IWorkflowMailNode<N extends string = any> extends IWorkflowActionNode<N, "mail"> {
   actionType: "mail";
   properties: {
     to: string[];
