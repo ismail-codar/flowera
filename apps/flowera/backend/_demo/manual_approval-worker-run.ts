@@ -37,6 +37,7 @@ app.get("/webhook", async (req, res) => {
   if (!workflow) throw new Error(`Workflow ${workflowName} not found`);
   console.log("/webhook ----> ", workflowName, workflowInstanceId, nodeName, payload);
   workflowClient.raiseEvent(workflowInstanceId as string, `webhook_${nodeName}`, payload);
+  res.send(`${nodeName} çalıştırıldı`);
 });
 
 app.post("/start-workflow", async (req, res) => {
@@ -51,9 +52,10 @@ app.post("/start-workflow", async (req, res) => {
     console.log(`Orchestration scheduled with ID: ${workflowInstanceId}`);
 
     // Wait for orchestration completion
-    const state = await workflowClient.waitForWorkflowCompletion(workflowInstanceId, undefined, 99999);
+    // const state = await workflowClient.waitForWorkflowCompletion(workflowInstanceId, undefined, 99999);
+    const state = await workflowClient.waitForWorkflowStart(workflowInstanceId);
 
-    const orchestrationResult = `Orchestration completed! Result: ${state?.serializedOutput}`;
+    const orchestrationResult = "Orchestration completed!";
     console.log(orchestrationResult);
     res.send(orchestrationResult);
   } catch (error) {
