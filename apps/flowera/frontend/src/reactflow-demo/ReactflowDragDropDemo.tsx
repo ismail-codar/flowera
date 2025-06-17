@@ -14,6 +14,7 @@ import {
 
 import { useDnD } from "../react-flow/DnDContext";
 import { SideBar } from "./SideBar";
+import ColorSelectorNode from "./ColorSelectorNode";
 
 const initialNodes = [
   {
@@ -32,7 +33,7 @@ export const ReactflowDragDropDemo = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
-  const [type] = useDnD();
+  const [type, setType] = useDnD();
 
   const onConnect = useCallback((params: any) => setEdges((eds: Edge[]) => addEdge(params, eds)), []);
 
@@ -70,7 +71,7 @@ export const ReactflowDragDropDemo = () => {
   );
 
   const onDragStart = (event: any, nodeType: any) => {
-    // setType(nodeType);
+    setType(nodeType);
     event.dataTransfer.setData("text/plain", nodeType);
     event.dataTransfer.effectAllowed = "move";
   };
@@ -89,6 +90,7 @@ export const ReactflowDragDropDemo = () => {
           onDragOver={onDragOver}
           fitView
           style={{ backgroundColor: "#F7F9FB" }}
+          nodeTypes={{ colorSelector: ColorSelectorNode }}
         >
           <Controls />
           <Background />

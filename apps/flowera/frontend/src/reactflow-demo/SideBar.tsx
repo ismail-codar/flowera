@@ -1,5 +1,6 @@
 import type React from "react";
 import { useDnD } from "../react-flow/DnDContext";
+import ColorSelectorNode from "./ColorSelectorNode";
 
 export const SideBar = () => {
   const [, setType] = useDnD();
@@ -20,6 +21,9 @@ export const SideBar = () => {
       </div>
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, "output")} draggable>
         Output Node
+      </div>
+      <div className="dndnode output" onDragStart={(event) => onDragStart(event, "colorSelector")} draggable>
+        Color Node
       </div>
     </aside>
   );
